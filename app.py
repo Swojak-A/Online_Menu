@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
 from passes.mail import MailData
-
+from random import shuffle
 
 # Class-based application configuration
 class ConfigClass(object):
@@ -87,6 +87,7 @@ class Restaurant(db.Model):
     __tablename__ = 'restaurants'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
+    description = db.Column(db.Text)
 
 class Restaurant_address(db.Model):
     __tablename__ = "restaurants_address"
@@ -114,22 +115,145 @@ class MenuItem(db.Model):
 
 user_manager = UserManager(app, db, User)
 
-# The Home page is accessible to anyone
+""" ROUTES """
+
+""" main routes """
+
 @app.route('/')
-def home_page():
-    return "main page"
+def mainPage():
+    restaurants = Restaurant.query.all()
+    restaurants = [i for i in restaurants]
+    shuffle(restaurants)
 
-# The Members page is only accessible to authenticated users
-@app.route('/members')
-@login_required  # Use of @login_required decorator
-def member_page():
-    return "login required"
+    return render_template("index.html", restaurants=restaurants[:9])
 
-# The Admin page requires an 'Admin' role.
-@app.route('/admin')
-@roles_required('Admin')  # Use of @roles_required decorator
-def admin_page():
-    return "admin only"
+@app.route('/restaurants/<int:restaurant_id>')
+def restaurantMenu(restaurant_id):
+    restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
+    menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
+    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items)
+
+""" restaurants routes """
+
+@app.route('/restaurant/new', methods=['GET', 'POST'])
+def newRestaurant():
+
+    if request.method == "POST":
+        newRestaurant = Restaurant(name=request.form['restaurant_name'],
+                                   description=request.form['restaurant_description'])
+
+        db.session.add(newRestaurant)
+        db.session.commit()
+        flash("New restaurant created!")
+        print("Restaurant created: {}".format(newRestaurant.name))
+        return redirect(url_for('restaurantMenu', restaurant_id=newRestaurant.id))
+
+    return render_template("newrestaurant.html")
+
+@app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
+def editRestaurant(restaurant_id):
+    editedRestaurant = Restaurant.query.filter_by(id=restaurant_id).one()
+
+    if request.method == "POST":
+        editedRestaurant.name = request.form['restaurant_name'] if request.form['restaurant_name'] != "" else editedRestaurant.name
+        editedRestaurant.description = request.form['restaurant_description'] if request.form[
+                                                                       'restaurant_description'] != "" else editedRestaurant.description
+
+        db.session.add(editedRestaurant)
+        db.session.commit()
+        flash("Restaurant successfully edited!")
+        print("Restaurant edited: {}".format(editedRestaurant.name))
+        return redirect(url_for('restaurantMenu', restaurant_id=editedRestaurant.id))
+
+    else:
+        return render_template("editrestaurant.html", restaurant=editedRestaurant)
+
+@app.route('/restaurant/<int:restaurant_id>/delete', methods=['GET', 'POST'])
+def deleteRestaurant(restaurant_id):
+    toBeDeletedRestaurant = Restaurant.query.filter_by(id=restaurant_id).one()
+
+    if request.method == "POST":
+        if request.form['confirmation'] == "DELETE":
+            db.session.delete(toBeDeletedRestaurant)
+            db.session.commit()
+            flash("Restaurant successfully deleted!")
+            print("Restaurant deleted: {}, {}".format(toBeDeletedRestaurant.id, toBeDeletedRestaurant.name))
+            return redirect(url_for('mainPage'))
+        else:
+            flash("Wrong captcha - restaurant could not be deleted")
+            return redirect(url_for('deleteRestaurant'))
+
+    else:
+        return render_template("deleterestaurant.html", restaurant=toBeDeletedRestaurant)
+
+
+""" menu item methods """
+
+@app.route('/restaurant/<int:restaurant_id>/item/new_item', methods=['GET', 'POST'])
+def newMenuItem(restaurant_id):
+    restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
+
+    if request.method == "POST":
+        newItem = MenuItem(name=request.form['name'],
+                                    description=request.form['description'],
+                                    price=request.form['price'],
+                                    course=request.form['course'],
+                                    restaurant_id=restaurant.id)
+        db.session.add(newItem)
+        db.session.commit()
+        flash("New menu item created!")
+        print("Item edited: {}, {}".format(newItem.name, newItem.description,  newItem.course, newItem.price))
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
+
+
+    else:
+        return render_template("newmenuitem.html", restaurant=restaurant)
+
+
+@app.route('/restaurant/<int:restaurant_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
+def editMenuItem(restaurant_id, item_id):
+    restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
+    editedItem = MenuItem.query.filter_by(id=item_id).one()
+
+    if request.method == "POST":
+        editedItem.name = request.form['name'] if request.form['name'] != "" else editedItem.name
+        editedItem.description = request.form['description'] if request.form['description'] != "" else editedItem.description
+        editedItem.price = request.form['price'] if request.form['price'] != "" else editedItem.price
+        editedItem.course = request.form['course'] if request.form['course'] != "" else editedItem.course
+
+        db.session.add(editedItem)
+        db.session.commit()
+        flash("Menu item successfully edited!")
+        print("Item edited: {}, {}".format(editedItem.name, editedItem.description, editedItem.course, editedItem.price))
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
+
+
+    else:
+        return render_template("editmenuitem.html", restaurant=restaurant, item=editedItem)
+
+
+@app.route('/restaurant/<int:restaurant_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
+def deleteMenuItem(restaurant_id, item_id):
+    restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
+    toBeDeletedItem = MenuItem.query.filter_by(id=item_id).one()
+
+    if request.method == "POST":
+        if request.form['confirmation'] == "DELETE":
+            db.session.delete(toBeDeletedItem)
+            db.session.commit()
+            flash("Menu item successfully erased!")
+            print("Item deleted: {}, {}".format(toBeDeletedItem.id, toBeDeletedItem.name))
+        else:
+            flash("Wrong captcha - restaurant could not be deleted")
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
+
+    else:
+        return render_template("deletemenuitem.html", restaurant=restaurant, item=toBeDeletedItem)
+
+
+
+
+
 
 if __name__ == "__main__":
 	app.run(host="0.0.0.0", port=5050, debug=True)
