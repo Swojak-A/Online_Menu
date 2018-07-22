@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <title>Online Menu</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta charset="utf-8">
+    <meta description="still i'll have to fill this up">
+    <!-- ^ to do -->
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- FavIcon -->
+    <link rel="icon" type="image/gif" href="">
+    <!-- ^ to do -->
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/style.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="{{url_for('mainPage')}}">Online Menu</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav text-uppercase ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#services">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#restaurants">Restaurants</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#how-to">How To</a>
+            </li>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+      <div class="grad-layer">
+        <div class="container">
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="intro-text">
+                <div class="intro-lead-in">Find a place to eat!</div>
+
+                  <form action="{{url_for('mainPage')}}" method = 'POST'>
+                    <div class="row">
+                      <div class="col-lg-3 header-form-grid ">
+                        
+                        <div class="dropdown">
+                          <input type="" name="" class="btn-block btn-xl dropdown-toggle form-control" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          </input>
+                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                          </div>
+                        </div>
+                        <!-- <input class="btn-block btn-xl form-control" type='text' size='30' name='name' placeholder='aa'> -->
+                      
+                      </div>
+                      <div class="col-lg-6 header-form-grid ">
+                        <input  class="btn-block btn-xl form-control" type='text' size='30' name='name' placeholder='aa'>
+                      </div>
+                      <div class="col-lg-3 header-form-grid ">
+                        <button class="btn btn-primary btn-block btn-xl btn-text-black" type="submit">Search</button>
+                      </div>
+                      
+                    </div>
+                  </form>
+
+              <a class="btn btn-primary btn-text-black js-scroll-trigger" href="{{url_for('newRestaurant')}}" style="margin-top: 45px;">Add your restraurant</a>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+
+
+
+
+    <!-- Services -->
+    <section class="triple-padding" id="services">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading text-uppercase">Services</h2>
+            <h3 class="section-subheading text-muted">Best restaurants and bars from your place in one place online!</h3>
+          </div>
+        </div>
+        <div class="row text-center">
+          <div class="col-md-4">
+            <span class="fa-stack fa-4x">
+              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+              <i class="fas fa-building fa-stack-1x fa-inverse"></i>
+            </span>
+            <h4 class="service-heading">Wide Range</h4>
+            <p class="text-muted">Over 1500+ restaurants from all over the globe. Browse through them and find out what they have to offer.</p>
+          </div>
+          <div class="col-md-4">
+            <span class="fa-stack fa-4x">
+              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+              <i class="fas fa-utensils fa-stack-1x fa-inverse"></i>
+            </span>
+            <h4 class="service-heading">Delicious Meals</h4>
+            <p class="text-muted">Explore new tastes and exotic cuisines. You want to try something you've never tried? Here on Online Menu we have everything you need.</p>
+          </div>
+          <div class="col-md-4">
+            <span class="fa-stack fa-4x">
+              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+              <i class="fas fa-shopping-basket fa-stack-1x fa-inverse"></i>
+            </span>
+            <h4 class="service-heading">Online Reservation</h4>
+            <p class="text-muted">Save your time by reserving tables via Online Menu. We will provide you with all the details you need.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+    <!-- Portfolio Grid -->
+    <section class="triple-padding bg-light" id="restaurants">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading text-uppercase">Restaurants</h2>
+            <h3 class="section-subheading text-muted">Check out our top restaurant!</h3>
+          </div>
+        </div>
+        <div class="row">
+          {% for restaurant in restaurants %}
+          <div class="col-md-4 col-sm-6 restaurants-item">
+            <a class="restaurants-link" href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}">
+              <div class="restaurants-hover">
+                <div class="restaurants-hover-content">
+                  <i class="fa fa-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="/static/img/restaurants/{{ restaurant.id }}/thumbnail.jpeg" alt="">
+            </a>
+            <div class="restaurants-caption text-left shadow-sm">
+              <h4>{{ restaurant.name }}</h4>
+              <p class="text-muted">Lorem ipsum dolor sit.</p>
+              <a href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}">Browse menu</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12 text-right">
+            <a href="#">more restaurants</a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <a class="btn btn-primary btn-text-black js-scroll-trigger" href="{{url_for('newRestaurant')}}" style="margin-top: 45px;">Add your restraurant</a>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+
+
+
+
+    <!-- About -->
+    <section class="triple-padding" id="how-to">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading text-uppercase">How does Online Menu work?</h2>
+            <h3 class="section-subheading text-muted">Find out how to order dinner on our site.</h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="timeline">
+              <li>
+                <div class="timeline-image">
+                  <img class="rounded-circle img-fluid" src="/static/img/index-how/how-step1.jpeg" alt="">
+                </div>
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4 class="text-muted">Step 1</h4>
+                    <h4 class="subheading">Browse through our Restaurants</h4>
+                  </div>
+                  <div class="timeline-body">
+                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                  </div>
+                </div>
+              </li>
+
+              <li class="timeline-inverted">
+                <div class="timeline-image">
+                  <img class="rounded-circle img-fluid" src="/static/img/index-how/how-step2.jpeg" alt="">
+                </div>
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4 class="text-muted">Step 2</h4>
+                    <h4 class="subheading">Find out what would you like to eat</h4>
+                  </div>
+                  <div class="timeline-body">
+                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                  </div>
+                </div>
+              </li>
+
+              <li>
+                <div class="timeline-image">
+                  <img class="rounded-circle img-fluid" src="/static/img/index-how/how-step3.jpeg" alt="">
+                </div>
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4 class="text-muted">Step 3</h4>
+                    <h4 class="subheading">Reserve a table online</h4>
+                  </div>
+                  <div class="timeline-body">
+                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                  </div>
+                </div>
+              </li>
+
+              <li class="timeline-inverted">
+                <div class="timeline-image">
+                  <h4>Enjoy
+                    <br>Your
+                    <br>Meal!</h4>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <span class="copyright">Copyright &copy; SwA 2018</span>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a target="_blank" href="mailto:swojak.a@gmail.com">
+                  <i class="fa fa-envelope"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a target="_blank" href="https://swojak-a.github.io/">
+                  <i class="fa fa-github"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a target="_blank" href="https://twitter.com/arkadiuszswojak">
+                  <i class="fa fa-twitter"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline quicklinks">
+              <li class="list-inline-item">
+                <a href="#">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">Terms of Use</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="/static/vendor/agency-template/jqBootstrapValidation.js"></script>
+    <script src="/static/vendor/agency-template/contact_me.js"></script>
+
+    <!-- Custom scripts for agency template -->
+    <script src="/static/vendor/agency-template/agency.min.js"></script>
+
+  </body>
+
+
+
+</html>
