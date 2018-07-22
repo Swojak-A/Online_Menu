@@ -1,4 +1,4 @@
-# Online_Menu app [FINISHED]
+# Online_Menu app [WORK IN PROGRESS]
 
 Basic ORM Flask-based app.
 
