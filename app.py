@@ -1,9 +1,8 @@
 import datetime
 from flask import Flask, request, render_template, flash, redirect, url_for
-# from flask.ext.babel import Babel
+# from flask_babelex import Babel
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
-# to config
 from passes.mail import MailData
 
 
@@ -115,9 +114,22 @@ class MenuItem(db.Model):
 
 user_manager = UserManager(app, db, User)
 
+# The Home page is accessible to anyone
 @app.route('/')
-def index():
-	return "test 1"
+def home_page():
+    return "main page"
+
+# The Members page is only accessible to authenticated users
+@app.route('/members')
+@login_required  # Use of @login_required decorator
+def member_page():
+    return "login required"
+
+# The Admin page requires an 'Admin' role.
+@app.route('/admin')
+@roles_required('Admin')  # Use of @roles_required decorator
+def admin_page():
+    return "admin only"
 
 if __name__ == "__main__":
 	app.run(host="0.0.0.0", port=5050, debug=True)
