@@ -152,7 +152,7 @@ def newRestaurant():
         db.session.commit()
 
         flash("New restaurant: {} created!".format(newRestaurant.name))
-        print("Restaurant created: {}".format(newRestaurant.name))
+        app.logger.info("Restaurant created: {}".format(newRestaurant.name))
         return redirect(url_for('restaurantMenu', restaurant_id=newRestaurant.id))
 
     return render_template("newrestaurant.html")
@@ -172,7 +172,7 @@ def editRestaurant(restaurant_id):
             db.session.add(editedRestaurant)
             db.session.commit()
             flash("Restaurant successfully edited!")
-            print("Restaurant edited: {}".format(editedRestaurant.name))
+            app.logger.info("Restaurant edited: {}".format(editedRestaurant.name))
             return redirect(url_for('restaurantMenu', restaurant_id=editedRestaurant.id))
 
         else:
@@ -194,7 +194,7 @@ def deleteRestaurant(restaurant_id):
                 db.session.delete(toBeDeletedRestaurant)
                 db.session.commit()
                 flash("Restaurant successfully deleted!")
-                print("Restaurant deleted: {}, {}".format(toBeDeletedRestaurant.id, toBeDeletedRestaurant.name))
+                app.logger.info("Restaurant deleted: {}, {}".format(toBeDeletedRestaurant.id, toBeDeletedRestaurant.name))
                 return redirect(url_for('mainPage'))
             else:
                 flash("Wrong captcha - restaurant could not be deleted")
@@ -224,7 +224,7 @@ def newMenuItem(restaurant_id):
             db.session.add(newItem)
             db.session.commit()
             flash("New menu item created!")
-            print("Item edited: {}, {}".format(newItem.name, newItem.description,  newItem.course, newItem.price))
+            app.logger.info("Item edited: {}, {}".format(newItem.name, newItem.description,  newItem.course, newItem.price))
             return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
 
         else:
@@ -250,7 +250,7 @@ def editMenuItem(restaurant_id, item_id):
             db.session.add(editedItem)
             db.session.commit()
             flash("Menu item successfully edited!")
-            print("Item edited: {}, {}".format(editedItem.name, editedItem.description, editedItem.course, editedItem.price))
+            app.logger.info("Item edited: {}, {}".format(editedItem.name, editedItem.description, editedItem.course, editedItem.price))
             return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
 
         else:
@@ -272,7 +272,7 @@ def deleteMenuItem(restaurant_id, item_id):
                 db.session.delete(toBeDeletedItem)
                 db.session.commit()
                 flash("Menu item successfully erased!")
-                print("Item deleted: {}, {}".format(toBeDeletedItem.id, toBeDeletedItem.name))
+                app.logger.info("Item deleted: {}, {}".format(toBeDeletedItem.id, toBeDeletedItem.name))
             else:
                 flash("Wrong captcha - restaurant could not be deleted")
             return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
