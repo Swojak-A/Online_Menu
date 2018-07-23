@@ -53,8 +53,12 @@ section.triple-padding {
   padding: 90px 0;
 }
 
-section.no-padding {
+section.micro-padding {
   padding: 5px 0;
+}
+
+section.no-padding {
+  padding: 0px 0;
 }
 
 /*section#menu-info {
