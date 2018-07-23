@@ -1,114 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "_base.html" %}
+{% from "_macros.html" import nav_bar, header, message_flashing, google_maps_script %}
 
-  <head>
+<!-- HEAD -->
+{% block title %}
+  <title>Online Menu</title>
+{% endblock %}
 
-    <title>Online Menu</title>
-
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta charset="utf-8">
+{% block description %}
     <meta description="still i'll have to fill this up">
-    <!-- ^ to do -->
+{% endblock%}
 
-    <!-- Bootstrap core CSS -->
-    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- BODY -->
+{% block content %}
 
-    <!-- Custom fonts for this template -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  {{ nav_bar() }}
 
+  {{ header(main_page=True) }}
 
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-
-  <!-- FavIcon -->
-    <link rel="icon" type="image/gif" href="">
-    <!-- ^ to do -->
-
-    <!-- Custom styles for this template -->
-    <link href="/static/css/style.css" rel="stylesheet">
-
-  </head>
-
-  <body id="page-top">
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="{{url_for('mainPage')}}">Online Menu</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fa fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav text-uppercase ml-auto">
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#services">Services</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#restaurants">Restaurants</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#how-to">How To</a>
-            </li>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Header -->
-    <header class="masthead">
-      <div class="grad-layer">
-        <div class="container">
-
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="intro-text">
-                <div class="intro-lead-in">Find a place to eat!</div>
-
-                  <form action="{{url_for('mainPage')}}" method = 'POST'>
-                    <div class="row">
-                      <div class="col-lg-3 header-form-grid ">
-                        
-                        <div class="dropdown">
-                          <input type="" name="" class="btn-block btn-xl dropdown-toggle form-control" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          </input>
-                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
-                        </div>
-                        <!-- <input class="btn-block btn-xl form-control" type='text' size='30' name='name' placeholder='aa'> -->
-                      
-                      </div>
-                      <div class="col-lg-6 header-form-grid ">
-                        <input  class="btn-block btn-xl form-control" type='text' size='30' name='name' placeholder='aa'>
-                      </div>
-                      <div class="col-lg-3 header-form-grid ">
-                        <button class="btn btn-primary btn-block btn-xl btn-text-black" type="submit">Search</button>
-                      </div>
-                      
-                    </div>
-                  </form>
-
-              <a class="btn btn-primary btn-text-black js-scroll-trigger" href="{{url_for('newRestaurant')}}" style="margin-top: 45px;">Add your restraurant</a>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </header>
-
-
-
-
+  {{ message_flashing() }}
 
     <!-- Services -->
     <section class="triple-padding" id="services">
@@ -151,7 +60,7 @@
 
 
 
-    <!-- Portfolio Grid -->
+    <!-- Restaurants Teaser -->
     <section class="triple-padding bg-light" id="restaurants">
       <div class="container">
         <div class="row">
@@ -199,7 +108,7 @@
 
 
 
-    <!-- About -->
+    <!-- How-To -->
     <section class="triple-padding" id="how-to">
       <div class="container">
         <div class="row">
@@ -270,67 +179,4 @@
       </div>
     </section>
 
-
-
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-            <span class="copyright">Copyright &copy; SwA 2018</span>
-          </div>
-          <div class="col-md-4">
-            <ul class="list-inline social-buttons">
-              <li class="list-inline-item">
-                <a target="_blank" href="mailto:swojak.a@gmail.com">
-                  <i class="fa fa-envelope"></i>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a target="_blank" href="https://swojak-a.github.io/">
-                  <i class="fa fa-github"></i>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a target="_blank" href="https://twitter.com/arkadiuszswojak">
-                  <i class="fa fa-twitter"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="col-md-4">
-            <ul class="list-inline quicklinks">
-              <li class="list-inline-item">
-                <a href="#">Privacy Policy</a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">Terms of Use</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="/static/vendor/jquery/jquery.min.js"></script>
-    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Plugin JavaScript -->
-    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Contact form JavaScript -->
-    <script src="/static/vendor/agency-template/jqBootstrapValidation.js"></script>
-    <script src="/static/vendor/agency-template/contact_me.js"></script>
-
-    <!-- Custom scripts for agency template -->
-    <script src="/static/vendor/agency-template/agency.min.js"></script>
-
-  </body>
-
-
-
-</html>
+{% endblock %}
