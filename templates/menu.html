@@ -14,7 +14,7 @@
 <!-- BODY -->
 {% block content %}
 
-  {{ nav_bar() }}
+  {{ nav_bar({"Info":"#restaurant-info", "Menu":"#menu", "Comments":"#comments"}) }}
 
   {{ header(main_page=False, restaurant=restaurant) }}
 
