@@ -162,39 +162,50 @@ def newRestaurant():
 def editRestaurant(restaurant_id):
     editedRestaurant = Restaurant.query.filter_by(id=restaurant_id).one()
 
-    if request.method == "POST":
-        editedRestaurant.name = request.form['restaurant_name'] if request.form['restaurant_name'] != "" else editedRestaurant.name
-        editedRestaurant.description = request.form['restaurant_description'] if request.form[
-                                                                       'restaurant_description'] != "" else editedRestaurant.description
+    if editedRestaurant in current_user.authorization:
+        if request.method == "POST":
+            editedRestaurant.name = request.form['restaurant_name'] if request.form[
+                                                                           'restaurant_name'] != "" else editedRestaurant.name
+            editedRestaurant.description = request.form['restaurant_description'] if request.form[
+                                                                                         'restaurant_description'] != "" else editedRestaurant.description
 
-        db.session.add(editedRestaurant)
-        db.session.commit()
-        flash("Restaurant successfully edited!")
-        print("Restaurant edited: {}".format(editedRestaurant.name))
-        return redirect(url_for('restaurantMenu', restaurant_id=editedRestaurant.id))
+            db.session.add(editedRestaurant)
+            db.session.commit()
+            flash("Restaurant successfully edited!")
+            print("Restaurant edited: {}".format(editedRestaurant.name))
+            return redirect(url_for('restaurantMenu', restaurant_id=editedRestaurant.id))
 
+        else:
+            return render_template("editrestaurant.html", restaurant=editedRestaurant)
     else:
-        return render_template("editrestaurant.html", restaurant=editedRestaurant)
+        flash("You are not authorized to make changes in this area.")
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
+
+
 
 @app.route('/restaurants/<int:restaurant_id>/delete', methods=['GET', 'POST'])
 @login_required
 def deleteRestaurant(restaurant_id):
     toBeDeletedRestaurant = Restaurant.query.filter_by(id=restaurant_id).one()
 
-    if request.method == "POST":
-        if request.form['confirmation'] == "DELETE":
-            db.session.delete(toBeDeletedRestaurant)
-            db.session.commit()
-            flash("Restaurant successfully deleted!")
-            print("Restaurant deleted: {}, {}".format(toBeDeletedRestaurant.id, toBeDeletedRestaurant.name))
-            return redirect(url_for('mainPage'))
+    if toBeDeletedRestaurant in current_user.authorization:
+        if request.method == "POST":
+            if request.form['confirmation'] == "DELETE":
+                db.session.delete(toBeDeletedRestaurant)
+                db.session.commit()
+                flash("Restaurant successfully deleted!")
+                print("Restaurant deleted: {}, {}".format(toBeDeletedRestaurant.id, toBeDeletedRestaurant.name))
+                return redirect(url_for('mainPage'))
+            else:
+                flash("Wrong captcha - restaurant could not be deleted")
+                return redirect(url_for('deleteRestaurant'))
+
         else:
-            flash("Wrong captcha - restaurant could not be deleted")
-            return redirect(url_for('deleteRestaurant'))
+            return render_template("deleterestaurant.html", restaurant=toBeDeletedRestaurant)
 
     else:
-        return render_template("deleterestaurant.html", restaurant=toBeDeletedRestaurant)
-
+        flash("You are not authorized to make changes in this area.")
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
 
 """ menu item methods """
 
@@ -203,22 +214,25 @@ def deleteRestaurant(restaurant_id):
 def newMenuItem(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
 
-    if request.method == "POST":
-        newItem = MenuItem(name=request.form['name'],
-                                    description=request.form['description'],
-                                    price=request.form['price'],
-                                    course=request.form['course'],
-                                    restaurant_id=restaurant.id)
-        db.session.add(newItem)
-        db.session.commit()
-        flash("New menu item created!")
-        print("Item edited: {}, {}".format(newItem.name, newItem.description,  newItem.course, newItem.price))
-        return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
+    if restaurant in current_user.authorization:
+        if request.method == "POST":
+            newItem = MenuItem(name=request.form['name'],
+                                        description=request.form['description'],
+                                        price=request.form['price'],
+                                        course=request.form['course'],
+                                        restaurant_id=restaurant.id)
+            db.session.add(newItem)
+            db.session.commit()
+            flash("New menu item created!")
+            print("Item edited: {}, {}".format(newItem.name, newItem.description,  newItem.course, newItem.price))
+            return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
 
+        else:
+            return render_template("newmenuitem.html", restaurant=restaurant)
 
     else:
-        return render_template("newmenuitem.html", restaurant=restaurant)
-
+        flash("You are not authorized to make changes in this area.")
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
 
 @app.route('/restaurants/<int:restaurant_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -226,22 +240,25 @@ def editMenuItem(restaurant_id, item_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
     editedItem = MenuItem.query.filter_by(id=item_id).one()
 
-    if request.method == "POST":
-        editedItem.name = request.form['name'] if request.form['name'] != "" else editedItem.name
-        editedItem.description = request.form['description'] if request.form['description'] != "" else editedItem.description
-        editedItem.price = request.form['price'] if request.form['price'] != "" else editedItem.price
-        editedItem.course = request.form['course'] if request.form['course'] != "" else editedItem.course
+    if restaurant in current_user.authorization:
+        if request.method == "POST":
+            editedItem.name = request.form['name'] if request.form['name'] != "" else editedItem.name
+            editedItem.description = request.form['description'] if request.form['description'] != "" else editedItem.description
+            editedItem.price = request.form['price'] if request.form['price'] != "" else editedItem.price
+            editedItem.course = request.form['course'] if request.form['course'] != "" else editedItem.course
 
-        db.session.add(editedItem)
-        db.session.commit()
-        flash("Menu item successfully edited!")
-        print("Item edited: {}, {}".format(editedItem.name, editedItem.description, editedItem.course, editedItem.price))
-        return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
+            db.session.add(editedItem)
+            db.session.commit()
+            flash("Menu item successfully edited!")
+            print("Item edited: {}, {}".format(editedItem.name, editedItem.description, editedItem.course, editedItem.price))
+            return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
 
+        else:
+            return render_template("editmenuitem.html", restaurant=restaurant, item=editedItem)
 
     else:
-        return render_template("editmenuitem.html", restaurant=restaurant, item=editedItem)
-
+        flash("You are not authorized to make changes in this area.")
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
 
 @app.route('/restaurants/<int:restaurant_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 @login_required
@@ -249,19 +266,23 @@ def deleteMenuItem(restaurant_id, item_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
     toBeDeletedItem = MenuItem.query.filter_by(id=item_id).one()
 
-    if request.method == "POST":
-        if request.form['confirmation'] == "DELETE":
-            db.session.delete(toBeDeletedItem)
-            db.session.commit()
-            flash("Menu item successfully erased!")
-            print("Item deleted: {}, {}".format(toBeDeletedItem.id, toBeDeletedItem.name))
+    if restaurant in current_user.authorization:
+        if request.method == "POST":
+            if request.form['confirmation'] == "DELETE":
+                db.session.delete(toBeDeletedItem)
+                db.session.commit()
+                flash("Menu item successfully erased!")
+                print("Item deleted: {}, {}".format(toBeDeletedItem.id, toBeDeletedItem.name))
+            else:
+                flash("Wrong captcha - restaurant could not be deleted")
+            return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
+
         else:
-            flash("Wrong captcha - restaurant could not be deleted")
-        return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
+            return render_template("deletemenuitem.html", restaurant=restaurant, item=toBeDeletedItem)
 
     else:
-        return render_template("deletemenuitem.html", restaurant=restaurant, item=toBeDeletedItem)
-
+        flash("You are not authorized to make changes in this area.")
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
 
 
 
