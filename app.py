@@ -176,7 +176,7 @@ def editRestaurant(restaurant_id):
             return redirect(url_for('restaurantMenu', restaurant_id=editedRestaurant.id))
 
         else:
-            return render_template("editrestaurant.html", restaurant=editedRestaurant)
+            return render_template("restaurant-edit.html", restaurant=editedRestaurant)
     else:
         flash("You are not authorized to make changes in this area.")
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))

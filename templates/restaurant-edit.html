@@ -1,0 +1,67 @@
+{% extends "_base.html" %}
+{% from "_macros.html" import nav_bar, header, message_flashing, google_maps_script %}
+{% from "_macros_js.html" import ext_site_script %}
+
+<!-- HEAD -->
+{% block title %}
+  <title>Edit a restaurant: {{ restaurant.name }}</title>
+{% endblock %}
+
+{% block description %}
+    <meta description="still i'll have to fill this up">
+{% endblock%}
+
+<!-- BODY -->
+{% block content %}
+
+  {{ nav_bar() }}
+
+  {{ header(main_page=Fasle, restaurant=restaurant) }}
+
+  {{ message_flashing() }}
+
+    <section class="bg-white">
+      <div class="container item">
+        <div class="row">
+          <div class="col-lg-12 text-left">
+
+            <h1 class="section-heading">Edit a restaurant: {{ restaurant.name }}</h1>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form section -->
+    <section class="bg-white" id="restaurant-form">
+      <div class="container item">
+        <div class="row">
+          <div class="col-lg-12 text-left">
+
+            <!-- <form id="contactForm" action="{{url_for('newRestaurant')}}" method = 'POST' novalidate="novalidate"> -->
+            <form action="{{url_for('editRestaurant', restaurant_id=restaurant.id)}}" method = 'POST'>  <!-- novalidate="novalidate"> -->
+              <div class="form-group">
+                <input name="restaurant_name" class="form-control" id="restaurant-name" type="text" placeholder="{{restaurant.name}} (Type a new name)">
+                <p class="help-block text-danger"></p>
+              </div>
+              <div class="form-group">
+                <input name="restaurant_adress" class="form-control" id="restaurant-address" type="text" placeholder="Address *">
+                <p class="help-block text-danger"></p>
+              </div>
+              <div class="form-group">
+                <textarea name="restaurant_description" class="form-control" id="message" placeholder="{{restaurant.description}} (Type a new description)"></textarea>
+                <p class="help-block text-danger"></p>
+                <button class="btn btn-xl btn-block btn-primary" type="submit">Edit restaurant</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ ext_site_script() }}
+{% endblock%}
