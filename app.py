@@ -120,6 +120,7 @@ user_manager = UserManager(app, db, User)
 """ main routes """
 
 @app.route('/')
+@app.route('/index')
 def mainPage():
     restaurants = Restaurant.query.all()
     restaurants = [i for i in restaurants]
@@ -135,7 +136,8 @@ def restaurantMenu(restaurant_id):
 
 """ restaurants routes """
 
-@app.route('/restaurant/new', methods=['GET', 'POST'])
+@app.route('/restaurants/new', methods=['GET', 'POST'])
+@login_required
 def newRestaurant():
 
     if request.method == "POST":
@@ -150,7 +152,8 @@ def newRestaurant():
 
     return render_template("newrestaurant.html")
 
-@app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/edit', methods=['GET', 'POST'])
+@login_required
 def editRestaurant(restaurant_id):
     editedRestaurant = Restaurant.query.filter_by(id=restaurant_id).one()
 
@@ -168,7 +171,8 @@ def editRestaurant(restaurant_id):
     else:
         return render_template("editrestaurant.html", restaurant=editedRestaurant)
 
-@app.route('/restaurant/<int:restaurant_id>/delete', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/delete', methods=['GET', 'POST'])
+@login_required
 def deleteRestaurant(restaurant_id):
     toBeDeletedRestaurant = Restaurant.query.filter_by(id=restaurant_id).one()
 
@@ -189,7 +193,8 @@ def deleteRestaurant(restaurant_id):
 
 """ menu item methods """
 
-@app.route('/restaurant/<int:restaurant_id>/item/new_item', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/item/new_item', methods=['GET', 'POST'])
+@login_required
 def newMenuItem(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
 
@@ -210,7 +215,8 @@ def newMenuItem(restaurant_id):
         return render_template("newmenuitem.html", restaurant=restaurant)
 
 
-@app.route('/restaurant/<int:restaurant_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
+@login_required
 def editMenuItem(restaurant_id, item_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
     editedItem = MenuItem.query.filter_by(id=item_id).one()
@@ -232,7 +238,8 @@ def editMenuItem(restaurant_id, item_id):
         return render_template("editmenuitem.html", restaurant=restaurant, item=editedItem)
 
 
-@app.route('/restaurant/<int:restaurant_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
+@login_required
 def deleteMenuItem(restaurant_id, item_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
     toBeDeletedItem = MenuItem.query.filter_by(id=item_id).one()
