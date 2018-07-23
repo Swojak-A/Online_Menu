@@ -143,10 +143,15 @@ def newRestaurant():
     if request.method == "POST":
         newRestaurant = Restaurant(name=request.form['restaurant_name'],
                                    description=request.form['restaurant_description'])
-
         db.session.add(newRestaurant)
+
+        owner_role = Role.query.filter_by(name="Owner").one()
+        current_user.roles.append(owner_role)
+        current_user.authorization.append(newRestaurant)
+        db.session.add(current_user)
         db.session.commit()
-        flash("New restaurant created!")
+
+        flash("New restaurant: {} created!".format(newRestaurant.name))
         print("Restaurant created: {}".format(newRestaurant.name))
         return redirect(url_for('restaurantMenu', restaurant_id=newRestaurant.id))
 
