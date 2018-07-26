@@ -68,7 +68,11 @@
       </div>
     </header>
 	{% else %}
+    {% if restaurant %}
     <header class="masthead" style="background-image: url('/static/img/restaurants/{{restaurant.id}}/background.jpeg')">
+    {% else %}
+    <header class="masthead">
+    {% endif %}
     	<div class="grad-layer">
 	      <div class="container">
 	        <div class="intro-text">
