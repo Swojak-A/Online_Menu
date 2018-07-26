@@ -1,0 +1,58 @@
+{% extends "_base.html" %}
+{% from "_macros.html" import nav_bar, header, message_flashing %}
+{% from "_macros_js.html" import ext_site_script %}
+
+<!-- HEAD -->
+{% block title %}
+  <title>Delete a Menu Item: {{ item.name }}, {{ restaurant.name }}</title>
+{% endblock %}
+
+{% block description %}
+    <meta description="still i'll have to fill this up">
+{% endblock%}
+
+<!-- BODY -->
+{% block content %}
+
+  {{ nav_bar() }}
+
+  {{ header(main_page=False, restaurant=restaurant) }}
+
+  {{ message_flashing() }}
+
+    <section class="bg-white">
+      <div class="container item">
+        <div class="row">
+          <div class="col-lg-12 text-left">
+
+            <h1 class="section-heading">Are you sure to delete an item: {{ item.name }} from {{ restaurant.name }}?</h1>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form section -->
+    <section class="bg-white" id="restaurant-form">
+      <div class="container item">
+        <div class="row">
+          <div class="col-lg-12 text-left">
+            <form action="{{url_for('deleteMenuItem', restaurant_id=restaurant.id, item_id=item.id )}}" method = 'POST'>
+              <div class="form-group">
+                <input name="confirmation" class="form-control" id="restaurant-name" type="text" placeholder="To delete a menu item type 'DELETE'" required="required" data-validation-required-message="Please enter your restaurant name.">
+                <p class="help-block text-danger"></p>
+              </div>
+                <button class="btn btn-xl btn-block btn-primary" type="submit">Delete menu item</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ ext_site_script() }}
+{% endblock%}
