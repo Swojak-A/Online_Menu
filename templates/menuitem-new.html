@@ -1,0 +1,69 @@
+{% extends "_base.html" %}
+{% from "_macros.html" import nav_bar, header, message_flashing %}
+{% from "_macros_js.html" import ext_site_script %}
+
+<!-- HEAD -->
+{% block title %}
+  <title>New Menu Item in {{ restaurant.name }}</title>
+{% endblock %}
+
+{% block description %}
+    <meta description="still i'll have to fill this up">
+{% endblock%}
+
+<!-- BODY -->
+{% block content %}
+
+  {{ nav_bar() }}
+
+  {{ header(main_page=False, restaurant=restaurant) }}
+
+  {{ message_flashing() }}
+
+    <section class="bg-white">
+      <div class="container item">
+        <div class="row">
+          <div class="col-lg-12 text-left">
+
+            <h1 class="section-heading">New Menu Item in {{ restaurant.name }}:</h1>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white" id="restaurant-form">
+      <div class="container item">
+        <div class="row">
+          <div class="col-lg-12 text-left">
+
+            <form action="{{url_for('newMenuItem', restaurant_id=restaurant.id)}}" method = 'POST'> 
+              <div class="form-group">
+                <input name='name' class="form-control" type="text" placeholder="Name">
+                <p class="help-block text-danger"></p>
+              </div>
+              <div class="form-group">
+                <textarea name="description" class="form-control" placeholder="Description"></textarea>
+                <p class="help-block text-danger"></p>
+              </div>
+              <div class="form-group">
+                <input name='course' class="form-control" ype="text" placeholder="Course">
+                <p class="help-block text-danger"></p>
+              </div>
+                <input name='price' class="form-control" type="text" placeholder="Price">
+                <p class="help-block text-danger"></p>
+                <button class="btn btn-xl btn-block btn-primary" type="submit">Add new menu item!</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ ext_site_script() }}
+{% endblock%}
