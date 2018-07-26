@@ -155,7 +155,7 @@ def newRestaurant():
         app.logger.info("Restaurant created: {}".format(newRestaurant.name))
         return redirect(url_for('restaurantMenu', restaurant_id=newRestaurant.id))
 
-    return render_template("newrestaurant.html")
+    return render_template("restaurant-new.html")
 
 @app.route('/restaurants/<int:restaurant_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -201,7 +201,7 @@ def deleteRestaurant(restaurant_id):
                 return redirect(url_for('deleteRestaurant'))
 
         else:
-            return render_template("deleterestaurant.html", restaurant=toBeDeletedRestaurant)
+            return render_template("restaurant-delete.html", restaurant=toBeDeletedRestaurant)
 
     else:
         flash("You are not authorized to make changes in this area.")
@@ -209,7 +209,7 @@ def deleteRestaurant(restaurant_id):
 
 """ menu item methods """
 
-@app.route('/restaurants/<int:restaurant_id>/item/new_item', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/item/new', methods=['GET', 'POST'])
 @login_required
 def newMenuItem(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
@@ -228,7 +228,7 @@ def newMenuItem(restaurant_id):
             return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
 
         else:
-            return render_template("newmenuitem.html", restaurant=restaurant)
+            return render_template("menuitem-new.html", restaurant=restaurant)
 
     else:
         flash("You are not authorized to make changes in this area.")
@@ -254,7 +254,7 @@ def editMenuItem(restaurant_id, item_id):
             return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
 
         else:
-            return render_template("editmenuitem.html", restaurant=restaurant, item=editedItem)
+            return render_template("menuitem-edit.html", restaurant=restaurant, item=editedItem)
 
     else:
         flash("You are not authorized to make changes in this area.")
@@ -278,7 +278,7 @@ def deleteMenuItem(restaurant_id, item_id):
             return redirect(url_for('restaurantMenu', restaurant_id=restaurant.id))
 
         else:
-            return render_template("deletemenuitem.html", restaurant=restaurant, item=toBeDeletedItem)
+            return render_template("menuitem-delete.html", restaurant=restaurant, item=toBeDeletedItem)
 
     else:
         flash("You are not authorized to make changes in this area.")
