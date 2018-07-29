@@ -128,11 +128,36 @@ def mainPage():
 
     return render_template("index.html", restaurants=restaurants[:9])
 
+@app.route('/restaurants')
+def restaurants():
+
+    return render_template("restaurants.html")
+
 @app.route('/restaurants/<int:restaurant_id>')
 def restaurantMenu(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
     menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
     return render_template("menu.html", restaurant=restaurant, menu_items=menu_items)
+
+@app.route("/_search_results", methods=['POST'])
+def search_results():
+
+    column = request.form['column'].lower()
+    user_input = request.form['input'].lower()
+    print("col: {}, input: {}".format(column, user_input))
+
+    if user_input:
+        # if user_input in ["edible"]:
+        #     fungi = Fungus.query.filter_by(edible=True).all()
+        # elif user_input in ["poisonous", "poisonus", "poison"]:
+        #     fungi = Fungus.query.filter_by(edible=False).all()
+        # else:
+        restaurants = Restaurant.query.filter(Restaurant.name.like('%{}%'.format(user_input))).all()
+    else:
+        restaurants = Restaurant.query.all()
+
+
+    return render_template("restaurants-search.html", restaurants=restaurants)
 
 """ restaurants routes """
 
