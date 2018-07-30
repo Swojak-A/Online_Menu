@@ -879,3 +879,17 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
 }
 }
 
+
+
+.star-rating {
+  line-height:32px;
+  font-size:1.25em;
+}
+
+.star-rating .fa-star, .fa-star-o, .fa-star-half-o{
+  color: #fed136;
+}
+
+.star-label {
+  font-size: 1rem;
+}
