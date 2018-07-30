@@ -113,6 +113,19 @@ class MenuItem(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     restaurant = db.relationship(Restaurant)
 
+class Post(db.Model):
+    __tablename__ = 'posts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
+    user = db.relationship(User)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id', ondelete='CASCADE'))
+    restaurant = db.relationship(Restaurant)
+    content = db.Column(db.Text)
+    posted_at = db.Column(db.DateTime())
+
+
+
 user_manager = UserManager(app, db, User)
 
 """ ROUTES """
@@ -128,16 +141,14 @@ def mainPage():
 
     return render_template("index.html", restaurants=restaurants[:9])
 
+
+
 @app.route('/restaurants')
 def restaurants():
 
     return render_template("restaurants.html")
 
-@app.route('/restaurants/<int:restaurant_id>')
-def restaurantMenu(restaurant_id):
-    restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
-    menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
-    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items)
+
 
 @app.route("/_search_results", methods=['POST'])
 def search_results():
@@ -158,6 +169,17 @@ def search_results():
 
 
     return render_template("restaurants-search.html", restaurants=restaurants)
+
+
+
+@app.route('/restaurants/<int:restaurant_id>')
+def restaurantMenu(restaurant_id):
+    restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
+    menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
+    posts = Post.query.filter_by(restaurant_id=restaurant_id).all()
+
+    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, posts=posts)
+
 
 """ restaurants routes """
 

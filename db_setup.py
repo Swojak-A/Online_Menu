@@ -114,6 +114,18 @@ class MenuItem(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     restaurant = db.relationship(Restaurant)
 
+class Post(db.Model):
+    __tablename__ = 'posts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
+    user = db.relationship(User)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id', ondelete='CASCADE'))
+    restaurant = db.relationship(Restaurant)
+    content = db.Column(db.Text)
+    posted_at = db.Column(db.DateTime())
+
+
 user_manager = UserManager(app, db, User)
 
 
@@ -131,28 +143,29 @@ if __name__ == "__main__":
 
     # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
     if not User.query.filter(User.email == 'admin@example.com').first():
-        user = User(
+        user1 = User(
             email='admin@example.com',
             email_confirmed_at=datetime.datetime.utcnow(),
             password=user_manager.hash_password('Password1'),
         )
-        user.roles.append(admin_role)
-        db.session.add(user)
+        user1.roles.append(admin_role)
+        db.session.add(user1)
         db.session.commit()
 
 
     # Create 'member@example.com' user with no roles
     if not User.query.filter(User.email == 'member@example.com').first():
-        user = User(
+        user2 = User(
             email='member@example.com',
             email_confirmed_at=datetime.datetime.utcnow(),
             password=user_manager.hash_password('Password1'),
         )
-        db.session.add(user)
+        db.session.add(user2)
         db.session.commit()
 
     # Menu for UrbanBurger
-    restaurant1 = Restaurant(name="Urban Burger")
+    restaurant1 = Restaurant(name="Urban Burger",
+                             description="This is a random description from template for restaurant Urban Burger.")
 
     db.session.add(restaurant1)
     db.session.commit()
@@ -255,4 +268,11 @@ if __name__ == "__main__":
                          price="12", course="Entree", restaurant=restaurant2)
 
     db.session.add(menuItem6)
+    db.session.commit()
+
+    post1 = Post(content="this is a random post",
+                 posted_at=datetime.datetime.utcnow(),
+                 user=user2,
+                 restaurant=restaurant1)
+    db.session.add(post1)
     db.session.commit()
