@@ -270,9 +270,23 @@ if __name__ == "__main__":
     db.session.add(menuItem6)
     db.session.commit()
 
-    post1 = Post(content="this is a random post",
+    post1 = Post(content="this is just a demo post",
                  posted_at=datetime.datetime.utcnow(),
                  user=user2,
                  restaurant=restaurant1)
     db.session.add(post1)
+    db.session.commit()
+
+    post2 = Post(content="this is a second demo post",
+                 posted_at=datetime.datetime.utcnow(),
+                 user=user2,
+                 restaurant=restaurant1)
+    db.session.add(post2)
+    db.session.commit()
+
+    post3 = Post(content="this is a third demo post",
+                 posted_at=datetime.datetime.utcnow(),
+                 user=user2,
+                 restaurant=restaurant2)
+    db.session.add(post3)
     db.session.commit()
