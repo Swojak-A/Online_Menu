@@ -142,6 +142,16 @@
               <h6>{{post.user.email}}</h6>
               <p class="text-muted"><small>Data dodania: {{post.posted_at.strftime('%Y-%m-%d %H:%m')}}</small></p>
 
+              <div class="star-rating">
+                <span class="star-label text-muted">Rating: </span>
+                <span class="fa fa-star-o" data-rating="1" post-rating="3.5"></span>
+                <span class="fa fa-star-o" data-rating="2" post-rating="3.5"></span>
+                <span class="fa fa-star-o" data-rating="3" post-rating="3.5"></span>
+                <span class="fa fa-star-o" data-rating="4" post-rating="3.5"></span>
+                <span class="fa fa-star-o" data-rating="5" post-rating="3.5"></span>
+                <span class="star-label text-muted">- 4.5</span>
+              </div>
+
               <p class="text-muted">{{post.content}}</p> 
             </div>
           </div>
@@ -192,4 +202,57 @@
 
 {% block scripts %}
   {{ google_maps_script() }}
+
+  <script type="text/javascript">
+  
+  var $star_rating = $('.star-rating .fa');
+
+
+  $(document).ready(function() {
+    $star_rating.each(function() {
+      var data_rating = parseFloat($(this).attr( "data-rating" ));
+      var post_rating = parseFloat($(this).attr( "post-rating" ));
+
+      if (data_rating <= post_rating) {
+        $(this).removeClass('fa-star-o').addClass('fa-star');
+      }
+      else if ((data_rating - 1) < post_rating) {
+        $(this).removeClass('fa-star-o').addClass('fa-star-half-o');
+      }
+
+    });
+
+  });
+
+  // $(document).ready(function() {
+  //   $star_rating.each(function() {
+  //     console.log($(this).attr( "data-rating" ));
+  //   });
+  // });
+
+
+// var $star_rating = $('.star-rating .fa');
+
+// var SetRatingStar = function() {
+//   return $star_rating.each(function() {
+//     if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
+//       return $(this).removeClass('fa-star-o').addClass('fa-star');
+//     } else {
+//       return $(this).removeClass('fa-star').removeClass('text-muted').addClass('fa-star-o');
+//     }
+//   });
+// };
+
+// $star_rating.on('click', function() {
+//   $star_rating.siblings('input.rating-value').val($(this).data('rating'));
+//   return SetRatingStar();
+// });
+
+// SetRatingStar();
+// $(document).ready(function() {
+
+// });
+
+
+  </script>
 {% endblock%}
