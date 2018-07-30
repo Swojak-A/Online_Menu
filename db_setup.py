@@ -224,6 +224,7 @@ if __name__ == "__main__":
     db.session.add(menuItem8)
     db.session.commit()
 
+
     # Menu for Super Stir Fry
     restaurant2 = Restaurant(name="Super Stir Fry")
 
@@ -270,6 +271,23 @@ if __name__ == "__main__":
     db.session.add(menuItem6)
     db.session.commit()
 
+
+
+    # Menu for Super Stir Fry
+    restaurant3 = Restaurant(name="Hummus Bomb")
+
+    db.session.add(restaurant3)
+    db.session.commit()
+
+    menuItem1 = MenuItem(name="Hummus",
+                         description="a Lebanese hummus dish. It consists of Lebanese-style wheat noodles served in a meat- or (occasionally) fish-based broth, often flavored with soy sauce or miso, and uses toppings such as sliced pork, dried seaweed, kamaboko, and green onions.",
+                         price="$12.99", course="Entree", restaurant=restaurant3)
+
+    db.session.add(menuItem1)
+    db.session.commit()
+
+
+    # Adding posts
     post1 = Post(content="this is just a demo post",
                  posted_at=datetime.datetime.utcnow(),
                  user=user2,
