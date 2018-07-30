@@ -179,7 +179,14 @@ def restaurantMenu(restaurant_id):
     menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
     posts = Post.query.filter_by(restaurant_id=restaurant_id).all()
 
-    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, posts=posts)
+    rating_average=None
+    if len(posts) > 0:
+        rating_sum = 0
+        for post in posts:
+            rating_sum += post.rating
+        rating_average = rating_sum / len(posts)
+
+    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, posts=posts, avg=rating_average)
 
 
 """ restaurants routes """
