@@ -143,13 +143,13 @@
               <p class="text-muted"><small>Data dodania: {{post.posted_at.strftime('%Y-%m-%d %H:%m')}}</small></p>
 
               <div class="star-rating">
-                <span class="star-label text-muted">Rating: </span>
-                <span class="fa fa-star-o" data-rating="1" post-rating="3.5"></span>
-                <span class="fa fa-star-o" data-rating="2" post-rating="3.5"></span>
-                <span class="fa fa-star-o" data-rating="3" post-rating="3.5"></span>
-                <span class="fa fa-star-o" data-rating="4" post-rating="3.5"></span>
-                <span class="fa fa-star-o" data-rating="5" post-rating="3.5"></span>
-                <span class="star-label text-muted">- 4.5</span>
+                <span class="star-label text-muted">Rated: </span>
+                <span class="fa fa-star-o" data-rating="1" post-rating="{{post.rating}}"></span>
+                <span class="fa fa-star-o" data-rating="2" post-rating="{{post.rating}}"></span>
+                <span class="fa fa-star-o" data-rating="3" post-rating="{{post.rating}}"></span>
+                <span class="fa fa-star-o" data-rating="4" post-rating="{{post.rating}}"></span>
+                <span class="fa fa-star-o" data-rating="5" post-rating="{{post.rating}}"></span>
+                <span class="star-label text-muted">- {{post.rating}}</span>
               </div>
 
               <p class="text-muted">{{post.content}}</p> 
