@@ -107,5 +107,31 @@
 {% endmacro %}
 
 
+<!-- rating -->
+{% macro rating(rate) %}
+  {% if rate %}
+    <div class="star-rating">
+      <span class="star-label text-muted">Rated: </span>
+      <span class="fa fa-star-o" data-rating="1" post-rating="{{rate}}"></span>
+      <span class="fa fa-star-o" data-rating="2" post-rating="{{rate}}"></span>
+      <span class="fa fa-star-o" data-rating="3" post-rating="{{rate}}"></span>
+      <span class="fa fa-star-o" data-rating="4" post-rating="{{rate}}"></span>
+      <span class="fa fa-star-o" data-rating="5" post-rating="{{rate}}"></span>
+      <span class="star-label text-muted">- {{rate}}</span>
+    </div>
 
+  {% else %}
+
+    <div class="star-rating">
+      <span class="star-label text-muted">Rated: </span>
+      <span class="fa fa-star-o text-muted"></span>
+      <span class="fa fa-star-o text-muted"></span>
+      <span class="fa fa-star-o text-muted"></span>
+      <span class="fa fa-star-o text-muted"></span>
+      <span class="fa fa-star-o text-muted"></span>
+      <span class="star-label text-muted">- no one rated this restaurant yet</span>
+    </div>
+
+  {% endif%}
+{% endmacro %}
 
