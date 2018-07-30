@@ -123,6 +123,7 @@ class Post(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id', ondelete='CASCADE'))
     restaurant = db.relationship(Restaurant)
     content = db.Column(db.Text)
+    rating = db.Column(db.Integer())
     posted_at = db.Column(db.DateTime())
 
 
@@ -289,6 +290,7 @@ if __name__ == "__main__":
 
     # Adding posts
     post1 = Post(content="this is just a demo post",
+                 rating=2,
                  posted_at=datetime.datetime.utcnow(),
                  user=user2,
                  restaurant=restaurant1)
@@ -296,6 +298,7 @@ if __name__ == "__main__":
     db.session.commit()
 
     post2 = Post(content="this is a second demo post",
+                 rating=5,
                  posted_at=datetime.datetime.utcnow(),
                  user=user2,
                  restaurant=restaurant1)
@@ -303,6 +306,7 @@ if __name__ == "__main__":
     db.session.commit()
 
     post3 = Post(content="this is a third demo post",
+                 rating=4,
                  posted_at=datetime.datetime.utcnow(),
                  user=user2,
                  restaurant=restaurant2)

@@ -122,6 +122,7 @@ class Post(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id', ondelete='CASCADE'))
     restaurant = db.relationship(Restaurant)
     content = db.Column(db.Text)
+    rating = db.Column(db.Integer())
     posted_at = db.Column(db.DateTime())
 
 
