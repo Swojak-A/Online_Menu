@@ -99,8 +99,9 @@ class Restaurant_address(db.Model):
     state = db.Column(db.String(50))
     city = db.Column(db.String(50))
     street_address = db.Column(db.String(50))
-    lon = db.Column(db.Float)
     lat = db.Column(db.Float)
+    lon = db.Column(db.Float)
+
 
 class MenuItem(db.Model):
     __tablename__ = 'menu_items'
@@ -176,6 +177,7 @@ def search_results():
 @app.route('/restaurants/<int:restaurant_id>')
 def restaurantMenu(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
+    restaurant_loc = Restaurant_address.query.filter_by(restaurant_id=restaurant_id).one()
     menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
     posts = Post.query.filter_by(restaurant_id=restaurant_id).all()
 
@@ -186,7 +188,8 @@ def restaurantMenu(restaurant_id):
             rating_sum += post.rating
         rating_average = rating_sum / len(posts)
 
-    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, posts=posts, avg=rating_average)
+
+    return render_template("menu.html", restaurant=restaurant, restaurant_loc=restaurant_loc, menu_items=menu_items, posts=posts, avg=rating_average)
 
 
 """ restaurants routes """
