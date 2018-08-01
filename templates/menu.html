@@ -28,7 +28,7 @@
           <div class="col-lg-10 text-left">
 
             <h1 class="section-heading">{{ restaurant.name }}</h1>
-            <h2 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h2>
+            <h2 class="section-subheading text-muted">{{ restaurant_loc.street_address }}, {{ restaurant_loc.city}}</h2>
 
           </div>
 
@@ -200,7 +200,7 @@
 {% endblock %}
 
 {% block scripts %}
-  {{ google_maps_script() }}
+  {{ google_maps_script(restaurant_loc.lat, restaurant_loc.lon) }}
 
   <script type="text/javascript">
   
