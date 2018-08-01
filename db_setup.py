@@ -100,8 +100,9 @@ class Restaurant_address(db.Model):
     state = db.Column(db.String(50))
     city = db.Column(db.String(50))
     street_address = db.Column(db.String(50))
-    lon = db.Column(db.Float)
     lat = db.Column(db.Float)
+    lon = db.Column(db.Float)
+
 
 class MenuItem(db.Model):
     __tablename__ = 'menu_items'
@@ -164,11 +165,24 @@ if __name__ == "__main__":
         db.session.add(user2)
         db.session.commit()
 
-    # Menu for UrbanBurger
+
+    # Restaurant & Menu for Urban Burger
     restaurant1 = Restaurant(name="Urban Burger",
                              description="This is a random description from template for restaurant Urban Burger.")
 
     db.session.add(restaurant1)
+    db.session.commit()
+
+    restaurant1_location = Restaurant_address(restaurant=restaurant1,
+                                              country="Poland",
+                                              state = "mazowieckie",
+                                              city = "Warsaw",
+                                              street_address = "Mazowiecka 2/4",
+                                              lat=52.237663,
+                                              lon = 21.013410
+                                              )
+
+    db.session.add(restaurant1_location)
     db.session.commit()
 
     menuItem2 = MenuItem(name="Veggie Burger", description="Juicy grilled veggie patty with tomato mayo and lettuce",
@@ -226,10 +240,22 @@ if __name__ == "__main__":
     db.session.commit()
 
 
-    # Menu for Super Stir Fry
+    # Restaurant & Menu for Super Stir Fry
     restaurant2 = Restaurant(name="Super Stir Fry")
 
     db.session.add(restaurant2)
+    db.session.commit()
+
+    restaurant2_location = Restaurant_address(restaurant=restaurant2,
+                                              country="Poland",
+                                              state = "mazowieckie",
+                                              city = "Warsaw",
+                                              street_address = "Mazowiecka 2/4" #,
+                                              # lat=52.237663,
+                                              # lon = 21.013410
+                                              )
+
+    db.session.add(restaurant2_location)
     db.session.commit()
 
     menuItem1 = MenuItem(name="Chicken Stir Fry", description="With your choice of noodles vegetables and sauces",
