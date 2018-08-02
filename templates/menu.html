@@ -28,7 +28,12 @@
           <div class="col-lg-10 text-left">
 
             <h1 class="section-heading">{{ restaurant.name }}</h1>
-            <h2 class="section-subheading text-muted">{{ restaurant_loc.street_address }}, {{ restaurant_loc.city}}</h2>
+
+            {% if restaurant.location[0] %}
+              <h2 class="section-subheading text-muted">{{ restaurant.location[0].street_address }}, {{ restaurant.location[0].city }}</h2>
+            {% else %}
+              <h2 class="section-subheading text-muted">Location not found in the database.</h2>
+            {% endif %}
 
           </div>
 
@@ -200,7 +205,7 @@
 {% endblock %}
 
 {% block scripts %}
-  {{ google_maps_script(restaurant_loc.lat, restaurant_loc.lon) }}
+  {{ google_maps_script(restaurant.location[0].lat, restaurant.location[0].lon) }}
 
   <script type="text/javascript">
   

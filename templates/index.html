@@ -82,7 +82,11 @@
             </a>
             <div class="restaurants-caption text-left shadow-sm">
               <h4>{{ restaurant.name }}</h4>
-              <p class="text-muted">Lorem ipsum dolor sit.</p>
+              {% if restaurant.location[0] %}
+              <p class="text-muted">{{ restaurant.location[0].street_address }}, {{ restaurant.location[0].city }}</p>
+              {% else %}
+              <p class="text-muted">Location not found in the database.</p>
+              {% endif %}
               <a href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}">Browse menu</a>
             </div>
           </div>
