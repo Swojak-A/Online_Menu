@@ -89,13 +89,13 @@ class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text)
+    location = db.relationship('Restaurant_address', backref='restaurant')
 
 class Restaurant_address(db.Model):
     __tablename__ = "restaurants_address"
 
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
-    restaurant = db.relationship(Restaurant)
     country = db.Column(db.String(50))
     state = db.Column(db.String(50))
     city = db.Column(db.String(50))
