@@ -250,9 +250,9 @@ if __name__ == "__main__":
                                               country="Poland",
                                               state = "mazowieckie",
                                               city = "Warsaw",
-                                              street_address = "Mazowiecka 2/4" #,
-                                              # lat=52.237663,
-                                              # lon = 21.013410
+                                              street_address = "Krakowskie Przedmieście 64" #,
+                                              # lat=52.245584,
+                                              # lon = 21.014508
                                               )
 
     db.session.add(restaurant2_location)
@@ -304,6 +304,18 @@ if __name__ == "__main__":
     restaurant3 = Restaurant(name="Hummus Bomb")
 
     db.session.add(restaurant3)
+    db.session.commit()
+
+    restaurant3_location = Restaurant_address(restaurant=restaurant3,
+                                              country="Poland",
+                                              state = "mazowieckie",
+                                              city = "Warsaw",
+                                              street_address = "plac Marszałka Józefa Piłsudskiego 9",
+                                              lat=52.243188,
+                                              lon = 21.011573
+                                              )
+
+    db.session.add(restaurant3_location)
     db.session.commit()
 
     menuItem1 = MenuItem(name="Hummus",
