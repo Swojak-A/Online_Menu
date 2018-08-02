@@ -187,7 +187,7 @@ def restaurantMenu(restaurant_id):
             rating_sum += post.rating
         rating_average = rating_sum / len(posts)
 
-    return render_template("menu.html", restaurant=restaurant, restaurant_loc=restaurant.location[0], menu_items=menu_items, posts=posts, avg=rating_average)
+    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, posts=posts, avg=rating_average)
 
 
 """ restaurants routes """
