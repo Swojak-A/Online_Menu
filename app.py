@@ -174,7 +174,7 @@ def search_results():
 
 
 
-@app.route('/restaurants/<int:restaurant_id>')
+@app.route('/restaurants/<int:restaurant_id>', methods=['GET', 'POST'])
 def restaurantMenu(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
     menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
@@ -186,6 +186,20 @@ def restaurantMenu(restaurant_id):
         for post in posts:
             rating_sum += post.rating
         rating_average = rating_sum / len(posts)
+
+    if request.method == "POST":
+        newPost = Post(content=request.form['post-content'],
+                       rating=request.form['rating-value'],
+                       posted_at=datetime.datetime.utcnow(),
+                       user=current_user,
+                       restaurant=restaurant)
+
+        db.session.add(newPost)
+        db.session.commit()
+
+        flash("Your comment was successfully submitted!")
+        app.logger.info("New post added to database")
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
 
     return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, posts=posts, avg=rating_average)
 
