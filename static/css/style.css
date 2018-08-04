@@ -880,7 +880,7 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
 }
 
 
-
+/* star rating display */
 .star-rating {
   line-height:32px;
   font-size:1.25em;
@@ -894,7 +894,42 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   font-size: 1rem;
 }
 
+/* star rating input */
+.star-rating-input{
+  font-size: 0;
+}
+.star-rating-input__wrap{
+  display: inline-block;
+  font-size: 1rem;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.star-rating-input__wrap:after{
+  content: "";
+  display: table;
+  clear: both;
+}
+.star-rating-input__ico{
+  float: right;
+  padding-left: 2px;
+  cursor: pointer;
+  color: #fed136;
+}
+.star-rating-input__ico:last-child{
+  padding-left: 0;
+}
+.star-rating-input__input{
+  display: none;
+}
+.star-rating-input__ico:hover:before,
+.star-rating-input__ico:hover ~ .star-rating-input__ico:before,
+.star-rating-input__input:checked ~ .star-rating-input__ico:before
+{
+  content: "\f005";
+}
 
+
+/* overlay for google maps if lat/lon == None */
 #overlay { 
    /*background-image: url(../overlay.png);*/
    background-color: black;
@@ -906,3 +941,10 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
    left: 0;
    z-index: 1000;
 }
+
+/* post input for post form */
+.post-input {
+  height: 120px;
+}
+
+
