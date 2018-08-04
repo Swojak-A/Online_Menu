@@ -1,0 +1,35 @@
+{% from "_macros.html" import post_view %}
+
+      {% if posts %}
+        {% if posts|length > 3 %}
+          {% for post in posts[:3] %}
+
+            {{ post_view(post) }}
+
+          {% endfor %}
+
+              <div class="col-lg-12 text-center" id="load-more-posts-sec">
+                  <hr>
+                  <button class="btn btn-primary btn-text-black" id="load-more-posts">load more posts</button>
+              </div>
+
+              <div id="more-posts">
+              </div>
+
+
+        {% else %}
+          {% for post in posts %}
+
+              {{ post_view(post) }}
+
+          {% endfor %}
+        {% endif %}
+      {% else %}
+
+            <div class="col-lg-12 text-center">
+              <hr>
+              <br>
+              <h6 class="text-muted">Theres are no posts yet.<br>Be the first one to add a review...</h6>
+            </div>
+
+      {% endif %}
