@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, request, render_template, flash, redirect, url_for
+from flask import Flask, request, render_template, flash, redirect, url_for, jsonify
 # from flask_babelex import Babel
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
@@ -202,6 +202,21 @@ def restaurantMenu(restaurant_id):
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
 
     return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, posts=posts, avg=rating_average)
+
+@app.route('/_more-posts', methods=['GET', 'POST'])
+def morePosts():
+
+    comments_count = request.args.get('comments')
+    restaurant_id = request.args.get('restaurant')
+
+    comments_count = int(comments_count)
+    last_post = int(comments_count + 4)
+
+    posts = Post.query.filter_by(restaurant_id=restaurant_id).slice(comments_count, last_post).all()
+
+    # return jsonify({'result' : "AJAX call successfull"})
+    return render_template("menu-comments.html", posts=posts)
+
 
 
 """ restaurants routes """
