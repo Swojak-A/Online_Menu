@@ -155,9 +155,9 @@ def restaurants():
 @app.route("/_search_results", methods=['POST'])
 def search_results():
 
-    column = request.form['column'].lower()
+    location = request.form['location'].lower()
     user_input = request.form['input'].lower()
-    print("col: {}, input: {}".format(column, user_input))
+    app.logger.info("User search using parameters: location = {}, input = {}".format(location, user_input))
 
     if user_input:
         # if user_input in ["edible"]:
