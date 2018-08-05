@@ -183,4 +183,35 @@
       </div>
     </section>
 
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+  
+  $(document).ready( function() {
+    $(document).on('click', '#search-btn', function(event) {
+      pass_search_values();
+      event.preventDefault();
+    });
+  });
+
+  var pass_search_values = function() {
+    var location = $('input[name="location"]').val();
+    var input = $('input[name="input"]').val();
+
+    var encoded_params = { location: location, input: input };
+    var params_str = jQuery.param( encoded_params );
+    var full_link = '/restaurants?' + params_str;
+    
+    window.location.href = full_link;
+  };
+
+</script>
+
+
+
+
 {% endblock %}
