@@ -150,9 +150,12 @@ def restaurants():
     location = request.args.get('location')
     user_input = request.args.get('input')
 
+    location = "" if location == None else location
+    user_input = "" if user_input == None else user_input
+
     app.logger.info("User search using parameters: location = {}, input = {}".format(location, user_input))
 
-    return render_template("restaurants.html", location=location, user_input=user_input)
+    return render_template("restaurants.html", location=location, user_input=location)
 
 
 
