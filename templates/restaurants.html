@@ -50,7 +50,7 @@
                   <input  class="btn-block form-control" type='text' size='30' name='input' placeholder='Type a Name or Cuisine...'>
                 </div>
                 <div class="col-lg-3 header-form-grid ">
-                  <button class="btn btn-primary btn-block btn-text-black" type="submit">Search</button>
+                  <button class="btn btn-primary btn-block btn-text-black" id="search-btn">Search</button>
                 </div>
                 
               </div>
@@ -141,22 +141,22 @@
 
   $(document).ready(function() {
 
-  $(document).bind('click', '#search-btn', function(event) {
+    $(document).on('click', '#search-btn', function(event) {
 
-    req=$.ajax({
-      data : {
-        column: $('input[name="column"]').val(),
-        input: $('input[name="input"]').val()
-      },
-      type: 'POST',
-      url: '/_search_results'
+      req=$.ajax({
+        data : {
+          column: $('input[name="column"]').val(),
+          input: $('input[name="input"]').val()
+        },
+        type: 'POST',
+        url: '/_search_results'
 
-    });
-    req.done(function(data) {
-      $('#restaurant-results').html(data);
-    })
+      });
+      req.done(function(data) {
+        $('#restaurant-results').html(data);
+      })
 
-    event.preventDefault();
+      event.preventDefault();
 
   });
 
