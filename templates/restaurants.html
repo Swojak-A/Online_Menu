@@ -1,5 +1,5 @@
 {% extends "_base.html" %}
-{% from "_macros.html" import nav_bar, header, message_flashing %}
+{% from "_macros.html" import nav_bar, header, search_form, message_flashing %}
 {% from "_macros_js.html" import google_maps_script %}
 
 <!-- HEAD -->
@@ -30,31 +30,7 @@
             <h1 class="section-heading">Find a place for you</h1>
             <br>
 
-            <form action="{{url_for('mainPage')}}" method = 'POST'>
-              <div class="row">
-                <div class="col-lg-3 header-form-grid ">
-                  
-                  <div class="dropdown">
-                    <input type="" name="column" class="btn-block dropdown-toggle form-control" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    </input>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="#">Name</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
-                  <!-- <input class="btn-block btn-xl form-control" type='text' size='30' name='name' placeholder='aa'> -->
-                
-                </div>
-                <div class="col-lg-6 header-form-grid ">
-                  <input  class="btn-block form-control" type='text' size='30' name='input' placeholder='Type a Name or Cuisine...'>
-                </div>
-                <div class="col-lg-3 header-form-grid ">
-                  <button class="btn btn-primary btn-block btn-text-black" id="search-btn">Search</button>
-                </div>
-                
-              </div>
-            </form>
+              {{ search_form() }}
 
           </div>
         </div>
@@ -128,6 +104,7 @@
 {% block scripts %}
 
 <script type="text/javascript">
+
   $(document).ready(function() {
     $('#drop-name').on('click', function() {
       $('#user-column').val('Name');
@@ -135,16 +112,17 @@
     $('#drop-lat-name').on('click', function() {
       $('#user-column').val('Latin Name');
     });
-
   });
 
   $(document).ready(function() {
 
     $(document).on('click', '#search-btn', function(event) {
 
+      console.log('test');
+
       req=$.ajax({
         data : {
-          column: $('input[name="column"]').val(),
+          location: $('input[name="location"]').val(),
           input: $('input[name="input"]').val()
         },
         type: 'POST',
