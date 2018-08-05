@@ -154,7 +154,7 @@
 
               <div class="col-lg-12 text-center" id="load-more-posts-sec">
                   <hr>
-                  <button class="btn btn-primary btn-text-black" id="load-more-posts">load more posts</button>
+                  <button class="btn btn-primary btn-text-black load-more-posts">load more posts</button>
               </div>
 
               <div id="more-posts">
@@ -234,10 +234,11 @@
 
   <script type="text/javascript">
   
-    var $star_rating = $('.star-rating .fa');
 
 
-    $(document).ready(function() {
+    var colorStarRatings = function() {
+      var $star_rating = $('.star-rating .fa');
+
       $star_rating.each(function() {
         var data_rating = parseFloat($(this).attr( "data-rating" ));
         var post_rating = parseFloat($(this).attr( "post-rating" ));
@@ -249,8 +250,12 @@
           $(this).removeClass('fa-star-o').addClass('fa-star-half-o');
         }
 
+        console.log("function colorStarRatings called")
       });
+    }
 
+    $(document).ready(function() {
+      colorStarRatings();
     });
 
   </script>
@@ -258,22 +263,18 @@
   <script type="text/javascript">
     
     $(document).ready(function() {
-      $(document).bind('click', '#load-more-posts', function(event) {
+      $(document).on("click", ".load-more-posts", function() {
+        console.log("test")
         promise_more_posts();
       });
     });
 
-    function promise_more_posts() {
+    var promise_more_posts = function() {
       var comment_count = 0;
 
       $('.comment').each(function(){
           comment_count++;
       });
-
-      // postData = {
-      //   comments : comment_count,
-      //   restaurant : {{ restaurant.id }}
-      // }
 
       var encoded_params = { comments: comment_count, restaurant: {{ restaurant.id }} };
       var params_str = jQuery.param( encoded_params );
@@ -282,18 +283,15 @@
       $.ajax({
         url: '/_more-posts?' + params_str,
         type: 'POST',
-        // contentType: "application/json",
-        // data: JSON.stringify(postData),
         success: function(data) {
           console.log("comments: " + comment_count);
           $('#load-more-posts-sec').remove();
           $('#more-posts').append(data);
+          colorStarRatings();
         }
       });
 
-      // return $.ajax({
-      //   url: '/_more-posts?current=' 
-      // });
+
     };
 
   </script>
