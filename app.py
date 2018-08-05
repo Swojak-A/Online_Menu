@@ -147,6 +147,10 @@ def mainPage():
 
 @app.route('/restaurants')
 def restaurants():
+    location = request.args.get('location')
+    user_input = request.args.get('input')
+
+    app.logger.info("User search using parameters: location = {}, input = {}".format(location, user_input))
 
     return render_template("restaurants.html")
 
