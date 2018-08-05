@@ -211,7 +211,13 @@
 
 </script>
 
+<script type="text/javascript">
 
+  $.get("https://ipinfo.io/json", function (response) {
+    $('input[name="location"]').val(response.city);
+}, "jsonp");
+
+</script>
 
 
 {% endblock %}
