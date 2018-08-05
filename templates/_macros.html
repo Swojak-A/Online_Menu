@@ -20,6 +20,10 @@
 {% endmacro %}
 
 
+
+
+
+
 <!-- Header -->
 {% macro header(main_page, restaurant) %}
 	{% if main_page==True %}
@@ -32,7 +36,8 @@
               <div class="intro-text">
                 <div class="intro-lead-in">Find a place to eat!</div>
 
-                  <form method="POST">
+                  {{ search_form() }}
+<!--                   <form method="POST">
                     <div class="row">
 
                       <div class="col-lg-3 header-form-grid ">  
@@ -40,9 +45,11 @@
                           <input name="location" class="btn-block btn-xl dropdown-toggle form-control" placeholder='Location' id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           </input>
                           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <a class="dropdown-item" href="#">Warszawa</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Warszawa</a>
+                            <a class="dropdown-item" href="#">Kraków</a>
+                            <a class="dropdown-item" href="#">Gdańsk</a>
                           </div>
                         </div>
                       </div>
@@ -56,7 +63,7 @@
                       </div>
                       
                     </div>
-                  </form>
+                  </form> -->
 
               <a class="btn btn-primary btn-text-black js-scroll-trigger" href="{{url_for('newRestaurant')}}" style="margin-top: 45px;">Add your restraurant</a>
 
@@ -82,6 +89,41 @@
     </header>
 	{% endif %}
 {% endmacro %}
+
+<!-- search form for header(main_page) or restaurant.html-->
+{% macro search_form() %}
+                  <form method="POST">
+                    <div class="row">
+
+                      <div class="col-lg-3 header-form-grid ">  
+                        <div class="dropdown">
+                          <input name="location" class="btn-block btn-xl dropdown-toggle form-control" placeholder='Location' id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          </input>
+                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Warszawa</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Warszawa</a>
+                            <a class="dropdown-item" href="#">Kraków</a>
+                            <a class="dropdown-item" href="#">Gdańsk</a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6 header-form-grid ">
+                        <input name='input' class="btn-block btn-xl form-control" type='text' size='30' placeholder='Type a restaurant name or cuisine...'>
+                      </div>
+                      
+                      <div class="col-lg-3 header-form-grid ">
+                        <button class="btn btn-primary btn-block btn-xl text-dark" id="search-btn">Search</button>
+                      </div>
+                      
+                    </div>
+                  </form>
+{% endmacro %}
+
+
+
+
 
 
 <!-- message flashing -->
