@@ -27,10 +27,10 @@
         <div class="row">
           <div class="col-lg-12 text-left">
 
-            <h1 class="section-heading">Find a place for you</h1>
+            <h1 class="section-heading">Find a place for you {{ location }}</h1>
             <br>
 
-              {{ search_form() }}
+              {{ search_form(location, user_input) }}
 
           </div>
         </div>
