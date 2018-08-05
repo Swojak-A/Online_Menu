@@ -152,7 +152,7 @@ def restaurants():
 
     app.logger.info("User search using parameters: location = {}, input = {}".format(location, user_input))
 
-    return render_template("restaurants.html")
+    return render_template("restaurants.html", location=location, user_input=user_input)
 
 
 
