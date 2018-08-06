@@ -98,6 +98,7 @@ class Restaurant_address(db.Model):
     country = db.Column(db.String(50))
     state = db.Column(db.String(50))
     city = db.Column(db.String(50))
+    district = db.Column(db.String(50))
     street_address = db.Column(db.String(50))
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
