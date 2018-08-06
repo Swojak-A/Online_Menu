@@ -178,6 +178,7 @@ if __name__ == "__main__":
                                               country="Poland",
                                               state = "mazowieckie",
                                               city = "Warsaw",
+                                              district = "Śródmieście",
                                               street_address = "Mazowiecka 2/4",
                                               lat=52.237663,
                                               lon = 21.013410
@@ -251,9 +252,10 @@ if __name__ == "__main__":
                                               country="Poland",
                                               state = "mazowieckie",
                                               city = "Warsaw",
-                                              street_address = "Krakowskie Przedmieście 64" #,
-                                              # lat=52.245584,
-                                              # lon = 21.014508
+                                              district="Śródmieście",
+                                              street_address = "Krakowskie Przedmieście 64",
+                                              lat= 52.245584,
+                                              lon = 21.014508
                                               )
 
     db.session.add(restaurant2_location)
@@ -311,6 +313,7 @@ if __name__ == "__main__":
                                               country="Poland",
                                               state = "mazowieckie",
                                               city = "Warsaw",
+                                              district="Śródmieście",
                                               street_address = "plac Marszałka Józefa Piłsudskiego 9",
                                               lat=52.243188,
                                               lon = 21.011573
