@@ -89,9 +89,10 @@ class Restaurant(db.Model):
     name = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text)
     location = db.relationship('Restaurant_address', backref='restaurant')
+    tags = db.relationship('Tag', secondary='restaurant_tags')
 
 class Restaurant_address(db.Model):
-    __tablename__ = "restaurants_address"
+    __tablename__ = "restaurant_address"
 
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
@@ -103,6 +104,18 @@ class Restaurant_address(db.Model):
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
 
+# Define the Role data-model
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+
+# Define the UserRoles association table
+class Restaurant_tags(db.Model):
+    __tablename__ = 'restaurant_tags'
+    id = db.Column(db.Integer(), primary_key=True)
+    restaurant_id = db.Column(db.Integer(), db.ForeignKey('restaurants.id', ondelete='CASCADE'))
+    tag_id = db.Column(db.Integer(), db.ForeignKey('tags.id', ondelete='CASCADE'))
 
 class MenuItem(db.Model):
     __tablename__ = 'menu_items'
@@ -114,6 +127,7 @@ class MenuItem(db.Model):
     course = db.Column(db.String(250))
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     restaurant = db.relationship(Restaurant)
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
