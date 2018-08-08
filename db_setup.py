@@ -64,6 +64,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False, server_default='')
 
     # User information
+    user_name = db.Column(db.String(100, collation='NOCASE'), nullable=False, server_default='')
     first_name = db.Column(db.String(100, collation='NOCASE'), nullable=False, server_default='')
     last_name = db.Column(db.String(100, collation='NOCASE'), nullable=False, server_default='')
 
@@ -89,6 +90,8 @@ class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text)
+    eatstreet_id = db.Column(db.String(50))
+    zomato_id = db.Column(db.String(50))
     location = db.relationship('Restaurant_address', backref='restaurant')
     tags = db.relationship('Tag', secondary='restaurant_tags')
 
