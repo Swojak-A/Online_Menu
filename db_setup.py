@@ -184,6 +184,14 @@ if __name__ == "__main__":
     # db.session.add(burger_tag)
     # db.session.commit()
 
+
+
+
+
+
+
+
+    '''
     # Restaurant & Menu for Urban Burger
     restaurant1 = Restaurant(name="Urban Burger",
                              description="This is a random description from template for restaurant Urban Burger.")
@@ -371,3 +379,4 @@ if __name__ == "__main__":
                  restaurant=restaurant2)
     db.session.add(post3)
     db.session.commit()
+    '''
