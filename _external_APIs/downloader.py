@@ -84,7 +84,7 @@ class Zomato_API():
 
             pprint(output_file)
 
-            save_json(file_name="data/city_{}.json".format(city.replace(",", "_").replace(" ", "")), data=output_file)
+            save_json(file_name="data/cities/city_{}.json".format(city.replace(",", "_").replace(" ", "")), data=output_file)
 
 
 
