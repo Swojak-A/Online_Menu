@@ -1,5 +1,6 @@
 # creating test db
 import requests
+import os
 import json
 from pprint import pprint
 from random import randint
@@ -21,6 +22,7 @@ def save_json(file_name, data):
 def open_json(file_name):
     with open(file_name) as fp:
         data = json.load(fp)
+        logging.debug("Opened json from file: {}.".format(file_name))
     return data
 
 # API classes
@@ -36,6 +38,44 @@ class Eatstreet_API():
         return "https://api.eatstreet.com/publicapi/v1/restaurant/{}/menu".format(restaurant_id)
 
         # params
+    def restaurant_params(self, latitude, longitude):
+        restaurant_params = {
+            "latitude": latitude,
+            "longitude": longitude,
+            "method": "both"
+        }
+        return restaurant_params
+
+    def fetch_restaurants(self, city_file):
+        try:
+            assert city_file.endswith(".json") == True
+        except AssertionError:
+            logging.error("Parameter: {} is not a json file".format(city_file))
+            raise
+
+        city = open_json(city_file)
+
+        response = requests.get(self.restaurant_url, headers=self.header,
+                                params=self.restaurant_params(latitude=city["latitude"], longitude=city["longitude"]))
+        eatstreet_restaurant_response = response.json()
+        data = eatstreet_restaurant_response
+
+        # pprint(data)
+
+        for restaurant in data["restaurants"]:
+            name = restaurant["name"].encode("ascii", errors="ignore").decode()
+            city = restaurant["city"]
+            state = restaurant["state"]
+
+            save_json(file_name="data/restaurants/restaurant_{}_{}_{}.json".format(city, state, name), data=restaurant)
+
+    def fetch_all_restaurants(self, path="data/cities/"):
+        for file in os.listdir(path):
+            city_file = path + file
+
+            logging.info("Preparing to fetch data from: {}".format(city_file))
+
+            self.fetch_restaurants(city_file=city_file)
 
 
 
@@ -111,4 +151,4 @@ if __name__ == "__main__":
     e = Eatstreet_API()
     z = Zomato_API()
 
-    z.fetch_cities(cities)
+    e.fetch_all_restaurants()
