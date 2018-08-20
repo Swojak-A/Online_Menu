@@ -170,6 +170,41 @@ class Zomato_API():
 
             save_json(file_name="data/cities/city_{}.json".format(city.replace(",", "_").replace(" ", "")), data=output_file)
 
+    def fetch_zomato_rest_data(self, restaurant_file):
+        restaurant_data = open_json(restaurant_file)
+
+        print("searching for matches for: {}".format(restaurant_data["name"]))
+
+        try:
+            response = requests.get(self.search_url, headers=self.header,
+                                    params=self.search_params(city_id=restaurant_data["zomato_city_id"],
+                                                              query_keyword=" ".join(restaurant_data["name"].split()[:2])
+                                                              ))
+            zomato_search_response = response.json()["restaurants"][0]["restaurant"]
+            zomato_id = zomato_search_response["id"]
+            zomato_name = zomato_search_response["name"]
+
+            accept_input = input("eatstreet: {}, \nzomato: {}\nis it okay? ".format(restaurant_data["name"], zomato_name))
+
+            if accept_input == "y" or accept_input == "z":
+                restaurant_data["zomato_id"] = zomato_id
+                restaurant_data["zomato_name"] = zomato_name
+
+                save_json(file_name=restaurant_file, data=restaurant_data)
+        except Exception as err:
+            logging.warning("error ({}) occured when fetching data from file: {}".format(err, restaurant_file))
+            with open("data/_reviews_errorlist.txt", "a") as fp:
+                fp.write(restaurant_file + "\n")
+
+
+
+    def fetch_all_zomato_rest_data(self, path="data/restaurants/"):
+        for file in os.listdir(path):
+            restaurant_file = path + file
+
+            logging.info("Preparing to fetch data from: {}".format(restaurant_file))
+
+            self.fetch_zomato_rest_data(restaurant_file=restaurant_file)
 
 def geolocate(city):
     try:
@@ -194,4 +229,4 @@ if __name__ == "__main__":
     e = Eatstreet_API()
     z = Zomato_API()
 
-    e.fetch_all_menus()
+    z.fetch_all_zomato_rest_data()
