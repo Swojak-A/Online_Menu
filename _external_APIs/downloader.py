@@ -143,6 +143,11 @@ class Zomato_API():
         }
         return search_params
 
+    def reviews_params(self, res_id):
+        search_params = {
+            "res_id": res_id
+        }
+        return search_params
 
     # fetching methods
     def fetch_cities(self, cities):
@@ -196,8 +201,6 @@ class Zomato_API():
             with open("data/_reviews_errorlist.txt", "a") as fp:
                 fp.write(restaurant_file + "\n")
 
-
-
     def fetch_all_zomato_rest_data(self, path="data/restaurants/"):
         for file in os.listdir(path):
             restaurant_file = path + file
@@ -205,6 +208,33 @@ class Zomato_API():
             logging.info("Preparing to fetch data from: {}".format(restaurant_file))
 
             self.fetch_zomato_rest_data(restaurant_file=restaurant_file)
+
+    def fetch_review(self, restaurant_file):
+        restaurant_data = open_json(restaurant_file)
+
+        if "zomato_id" in restaurant_data.keys():
+            try:
+                response = requests.get(self.reviews_url, headers=self.header,
+                                        params=self.reviews_params(res_id=restaurant_data["zomato_id"]))
+                zomato_search_response = response.json()
+
+                if zomato_search_response["reviews_count"] > 0:
+                    restaurant_data["reviews"] = zomato_search_response["user_reviews"]
+
+                    save_json(file_name=restaurant_file, data=restaurant_data)
+            except Exception as err:
+                logging.warning("error ({}) occured when fetching data from file: {}".format(err, restaurant_file))
+                with open("data/_reviews_errorlist.txt", "a") as fp:
+                    fp.write(restaurant_file + "\n")
+
+    def fetch_all_reviews(self, path="data/restaurants/"):
+        for file in os.listdir(path):
+            restaurant_file = path + file
+
+            logging.info("Preparing to fetch data from: {}".format(restaurant_file))
+
+            self.fetch_review(restaurant_file=restaurant_file)
+
 
 def geolocate(city):
     try:
@@ -229,4 +259,4 @@ if __name__ == "__main__":
     e = Eatstreet_API()
     z = Zomato_API()
 
-    z.fetch_all_zomato_rest_data()
+    z.fetch_all_reviews()
