@@ -3,9 +3,8 @@ import requests
 import os
 import json
 from pprint import pprint
-from random import randint
-import datetime
 from geopy.geocoders import Nominatim
+from _API_keys import eatstreet_API_key, zomato_API_key
 
 import logging
 
@@ -28,7 +27,7 @@ def open_json(file_name):
 # API classes
 class Eatstreet_API():
     def __init__(self):
-        self.key = "0a72c7182d649950"
+        self.key = eatstreet_API_key
         self.header = {"User-agent": "curl/7.43.0", "Accept": "application/json", "X-Access-Token": self.key}
 
         # URLs
@@ -117,7 +116,7 @@ class Eatstreet_API():
 
 class Zomato_API():
     def __init__(self):
-        self.key = "4c46fa3f7fdeee84299bb34ef33f0ba7"
+        self.key = zomato_API_key
         self.header = {"User-agent": "curl/7.43.0", "Accept": "application/json", "user_key": self.key}
 
         # URLs
