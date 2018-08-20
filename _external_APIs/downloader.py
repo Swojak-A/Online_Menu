@@ -46,23 +46,36 @@ class Eatstreet_API():
         }
         return restaurant_params
 
-    def fetch_restaurants(self, city_file):
+    def menu_params(self):
+        menu_params = {
+            "includeCustomizations": "false"
+        }
+        return menu_params
+
+        # assert json
+    def assert_json(self, input):
         try:
-            assert city_file.endswith(".json") == True
+            assert input.endswith(".json") == True
         except AssertionError:
-            logging.error("Parameter: {} is not a json file".format(city_file))
+            logging.error("Parameter: {} is not a json file".format(input))
             raise
 
-        city = open_json(city_file)
+        # fetching methods
+    def fetch_restaurants(self, city_file):
+        self.assert_json(input=city_file)
+
+        city_data = open_json(city_file)
 
         response = requests.get(self.restaurant_url, headers=self.header,
-                                params=self.restaurant_params(latitude=city["latitude"], longitude=city["longitude"]))
+                                params=self.restaurant_params(latitude=city_data["latitude"], longitude=city_data["longitude"]))
         eatstreet_restaurant_response = response.json()
         data = eatstreet_restaurant_response
 
         # pprint(data)
 
         for restaurant in data["restaurants"]:
+            restaurant["zomato_city_id"] = city_data["zomato_city_id"]
+
             name = restaurant["name"].encode("ascii", errors="ignore").decode()
             city = restaurant["city"]
             state = restaurant["state"]
@@ -77,7 +90,30 @@ class Eatstreet_API():
 
             self.fetch_restaurants(city_file=city_file)
 
+    def fetch_menu(self, restaurant_file):
+        self.assert_json(input=restaurant_file)
 
+        print(restaurant_file)
+
+        restaurant_data = open_json(restaurant_file)
+        eatstreet_id = restaurant_data["apiKey"]
+
+        response = requests.get(self.menu_url(eatstreet_id), headers=self.header,
+                                params=self.menu_params())
+        eatstreet_menu_response = response.json()
+        data = eatstreet_menu_response
+
+        restaurant_data["menu"] = data
+
+        save_json(file_name=restaurant_file, data=restaurant_data)
+
+    def fetch_all_menus(self, path="data/restaurants/"):
+        for file in os.listdir(path):
+            restaurant_file = path + file
+
+            logging.info("Preparing to fetch data from: {}".format(restaurant_file))
+
+            self.fetch_menu(restaurant_file=restaurant_file)
 
 class Zomato_API():
     def __init__(self):
@@ -98,6 +134,14 @@ class Zomato_API():
             "lon": longitude
         }
         return location_params
+
+    def search_params(self, city_id, query_keyword):
+        search_params = {
+            "entity_id": city_id,
+            "entity_type": "city",
+            "q": query_keyword
+        }
+        return search_params
 
 
     # fetching methods
@@ -127,7 +171,6 @@ class Zomato_API():
             save_json(file_name="data/cities/city_{}.json".format(city.replace(",", "_").replace(" ", "")), data=output_file)
 
 
-
 def geolocate(city):
     try:
         geolocator = Nominatim(user_agent="api_downloader")
@@ -151,4 +194,4 @@ if __name__ == "__main__":
     e = Eatstreet_API()
     z = Zomato_API()
 
-    e.fetch_all_restaurants()
+    e.fetch_all_menus()
