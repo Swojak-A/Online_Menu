@@ -6,6 +6,20 @@ from flask_user import current_user, login_required, roles_required, UserManager
 # to config
 from passes.mail import MailData
 
+# creating test db
+import requests
+import os
+import json
+from pprint import pprint
+from random import randint
+import datetime
+from geopy.geocoders import Nominatim
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
+
 
 # Class-based application configuration
 class ConfigClass(object):
@@ -101,10 +115,15 @@ class Restaurant_address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     country = db.Column(db.String(50))
+    country_code = db.Column(db.String(10))
     state = db.Column(db.String(50))
+    county = db.Column(db.String(50))
     city = db.Column(db.String(50))
-    district = db.Column(db.String(50))
-    street_address = db.Column(db.String(50))
+    suburb = db.Column(db.String(50))
+    neighbourhood = db.Column(db.String(50))
+    street = db.Column(db.String(50))
+    house_number = db.Column(db.String(20))
+    postcode = db.Column(db.String(20))
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
 
@@ -127,7 +146,7 @@ class MenuItem(db.Model):
     name = db.Column(db.String(80), nullable=False)
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(250))
-    price = db.Column(db.String(8))
+    price = db.Column(db.Float)
     course = db.Column(db.String(250))
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     restaurant = db.relationship(Restaurant)
@@ -148,17 +167,16 @@ class Post(db.Model):
 
 user_manager = UserManager(app, db, User)
 
+def create_basic_users():
+    if not Role.query.filter(Role.name == 'Admin').first():
+        admin_role = Role(name='Admin')
+        db.session.add(admin_role)
+        db.session.commit()
 
-
-if __name__ == "__main__":
-    # Create all database tables
-    db.create_all()
-
-    admin_role = Role(name='Admin')
-    owner_role = Role(name="Owner")
-    db.session.add(admin_role)
-    db.session.add(owner_role)
-    db.session.commit()
+    if not Role.query.filter(Role.name == 'Owner').first():
+        owner_role = Role(name="Owner")
+        db.session.add(owner_role)
+        db.session.commit()
 
 
     # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
@@ -183,203 +201,124 @@ if __name__ == "__main__":
         db.session.add(user2)
         db.session.commit()
 
-    # burger_tag = Tag(name="burger")
-    # db.session.add(burger_tag)
-    # db.session.commit()
+def get_value(dict, key):
+    value = dict[key] if key in dict.keys() else ""
+    return value
+
+def create_test_db(path="_external_APIs/data/restaurants/"):
+    temp_incrementation = 0
+
+
+    for file in os.listdir(path):
+        logging.info("Preparing to extract data from: {}".format(file))
+
+        with open(path + file) as fp:
+            restaurant_data = json.load(fp)
+
+        # pprint(restaurant_data)
+
+        # Restaurant class input
+        name = restaurant_data["name"]
+        eatstreet_id = restaurant_data["apiKey"]
+        if "zomato_id" in restaurant_data.keys():
+            zomato_id = restaurant_data["zomato_id"]
+        else:
+            zomato_id = ""
+        restaurant = Restaurant(name=name,
+                                eatstreet_id=eatstreet_id,
+                                zomato_id=zomato_id)
+        db.session.add(restaurant)
+        db.session.commit()
+
+        # address input
+        location_data = restaurant_data["full_location"]
+        restaurant_location = Restaurant_address(restaurant=restaurant,
+                                                 country= get_value(dict=location_data, key="country"),
+                                                 country_code = get_value(dict=location_data, key="country_code"),
+                                                 state = get_value(dict=location_data, key="state"),
+                                                 county = get_value(dict=location_data, key="county"),
+                                                 city = restaurant_data["city"],
+                                                 suburb = get_value(dict=location_data, key="suburb"),
+                                                 neighbourhood = get_value(dict=location_data, key="neighbourhood"),
+                                                 street = get_value(dict=location_data, key="road"),
+                                                 house_number = get_value(dict=location_data, key="house_number"),
+                                                 postcode = get_value(dict=location_data, key="postcode"),
+                                                 lat=restaurant_data["latitude"],
+                                                 lon=restaurant_data["longitude"]
+                                                 )
+        db.session.add(restaurant_location)
+        db.session.commit()
+
+        # Tags input
+        for e in restaurant_data["foodTypes"]:
+            if not Tag.query.filter(Tag.name == e).first():
+                tag = Tag(name=e)
+            else:
+                tag = Tag.query.filter(Tag.name == e).first()
+            restaurant.tags.append(tag)
+            db.session.add(restaurant)
+            db.session.commit()
+
+        # adding menu items
+        for e in restaurant_data["menu"]:
+            n = 0
+            limit = randint(2, 5)
+            course = e["name"]
+            for item in e["items"]:
+                name = item["name"]
+                price = item["basePrice"]
+                if "description" in item.keys():
+                    description = item["description"]
+                else:
+                    description = ""
+                menu_item = MenuItem(name=name,
+                                     description=description,
+                                     price=price,
+                                     course=course,
+                                     restaurant=restaurant)
+                db.session.add(menu_item)
+                db.session.commit()
+                n += 1
+                if n >= limit:
+                    break
+
+        if "reviews" in restaurant_data.keys():
+            # pprint(zomato_reviews_response)
+            for e in restaurant_data["reviews"]:
+                user = e["review"]["user"]["name"]
+                if not User.query.filter(User.user_name == user).first():
+                    user = User(
+                        user_name=user,
+                        email='fake_member_{}@example.com'.format(temp_incrementation),
+                        email_confirmed_at=datetime.datetime.utcnow(),
+                        password=user_manager.hash_password('Password1')
+                    )
+                    temp_incrementation += 1
+                else:
+                    user = User.query.filter(User.user_name == user).first()
+                content = e["review"]["review_text"]
+                rating = e["review"]["rating"]
+                posted_at = datetime.datetime.utcfromtimestamp(e["review"]["timestamp"])
+
+                post = Post(content=content,
+                            rating=rating,
+                            posted_at=posted_at,
+                            user=user,
+                            restaurant=restaurant)
+                db.session.add(post)
+                db.session.commit()
+        else:
+            continue
 
 
 
 
+if __name__ == "__main__":
+    # Create all database tables
+    db.create_all()
+
+    create_basic_users()
+    create_test_db()
 
 
 
-
-    '''
-    # Restaurant & Menu for Urban Burger
-    restaurant1 = Restaurant(name="Urban Burger",
-                             description="This is a random description from template for restaurant Urban Burger.")
-    restaurant1.tags.append(Tag(name="burger"))
-    db.session.add(restaurant1)
-    db.session.commit()
-
-    restaurant1_location = Restaurant_address(restaurant=restaurant1,
-                                              country="Poland",
-                                              state = "mazowieckie",
-                                              city = "Warsaw",
-                                              district = "Śródmieście",
-                                              street_address = "Mazowiecka 2/4",
-                                              lat=52.237663,
-                                              lon = 21.013410
-                                              )
-
-    db.session.add(restaurant1_location)
-    db.session.commit()
-
-    menuItem2 = MenuItem(name="Veggie Burger", description="Juicy grilled veggie patty with tomato mayo and lettuce",
-                         price="$7.50", course="Entree", restaurant=restaurant1)
-
-    db.session.add(menuItem2)
-    db.session.commit()
-
-    menuItem1 = MenuItem(name="French Fries", description="with garlic and parmesan", price="$2.99", course="Appetizer",
-                         restaurant=restaurant1)
-
-    db.session.add(menuItem1)
-    db.session.commit()
-
-    menuItem2 = MenuItem(name="Chicken Burger", description="Juicy grilled chicken patty with tomato mayo and lettuce",
-                         price="$5.50", course="Entree", restaurant=restaurant1)
-
-    db.session.add(menuItem2)
-    db.session.commit()
-
-    menuItem3 = MenuItem(name="Chocolate Cake", description="fresh baked and served with ice cream", price="$3.99",
-                         course="Dessert", restaurant=restaurant1)
-
-    db.session.add(menuItem3)
-    db.session.commit()
-
-    menuItem4 = MenuItem(name="Sirloin Burger", description="Made with grade A beef", price="$7.99", course="Entree",
-                         restaurant=restaurant1)
-
-    db.session.add(menuItem4)
-    db.session.commit()
-
-    menuItem5 = MenuItem(name="Root Beer", description="16oz of refreshing goodness", price="$1.99", course="Beverage",
-                         restaurant=restaurant1)
-
-    db.session.add(menuItem5)
-    db.session.commit()
-
-    menuItem6 = MenuItem(name="Iced Tea", description="with Lemon", price="$.99", course="Beverage",
-                         restaurant=restaurant1)
-
-    db.session.add(menuItem6)
-    db.session.commit()
-
-    menuItem7 = MenuItem(name="Grilled Cheese Sandwich", description="On texas toast with American Cheese",
-                         price="$3.49", course="Entree", restaurant=restaurant1)
-
-    db.session.add(menuItem7)
-    db.session.commit()
-
-    menuItem8 = MenuItem(name="Veggie Burger", description="Made with freshest of ingredients and home grown spices",
-                         price="$5.99", course="Entree", restaurant=restaurant1)
-
-    db.session.add(menuItem8)
-    db.session.commit()
-
-
-    # Restaurant & Menu for Super Stir Fry
-    restaurant2 = Restaurant(name="Super Stir Fry")
-
-    db.session.add(restaurant2)
-    db.session.commit()
-
-    restaurant2_location = Restaurant_address(restaurant=restaurant2,
-                                              country="Poland",
-                                              state = "mazowieckie",
-                                              city = "Warsaw",
-                                              district="Śródmieście",
-                                              street_address = "Krakowskie Przedmieście 64",
-                                              lat= 52.245584,
-                                              lon = 21.014508
-                                              )
-
-    db.session.add(restaurant2_location)
-    db.session.commit()
-
-    menuItem1 = MenuItem(name="Chicken Stir Fry", description="With your choice of noodles vegetables and sauces",
-                         price="$7.99", course="Entree", restaurant=restaurant2)
-
-    db.session.add(menuItem1)
-    db.session.commit()
-
-    menuItem2 = MenuItem(name="Peking Duck",
-                         description=" A famous duck dish from Beijing[1] that has been prepared since the imperial era. The meat is prized for its thin, crisp skin, with authentic versions of the dish serving mostly the skin and little meat, sliced in front of the diners by the cook",
-                         price="$25", course="Entree", restaurant=restaurant2)
-
-    db.session.add(menuItem2)
-    db.session.commit()
-
-    menuItem3 = MenuItem(name="Spicy Tuna Roll",
-                         description="Seared rare ahi, avocado, edamame, cucumber with wasabi soy sauce ", price="15",
-                         course="Entree", restaurant=restaurant2)
-
-    db.session.add(menuItem3)
-    db.session.commit()
-
-    menuItem4 = MenuItem(name="Nepali Momo ", description="Steamed dumplings made with vegetables, spices and meat. ",
-                         price="12", course="Entree", restaurant=restaurant2)
-
-    db.session.add(menuItem4)
-    db.session.commit()
-
-    menuItem5 = MenuItem(name="Beef Noodle Soup",
-                         description="A Chinese noodle soup made of stewed or red braised beef, beef broth, vegetables and Chinese noodles.",
-                         price="14", course="Entree", restaurant=restaurant2)
-
-    db.session.add(menuItem5)
-    db.session.commit()
-
-    menuItem6 = MenuItem(name="Ramen",
-                         description="a Japanese noodle soup dish. It consists of Chinese-style wheat noodles served in a meat- or (occasionally) fish-based broth, often flavored with soy sauce or miso, and uses toppings such as sliced pork, dried seaweed, kamaboko, and green onions.",
-                         price="12", course="Entree", restaurant=restaurant2)
-
-    db.session.add(menuItem6)
-    db.session.commit()
-
-
-
-    # Menu for Super Stir Fry
-    restaurant3 = Restaurant(name="Hummus Bomb")
-
-    db.session.add(restaurant3)
-    db.session.commit()
-
-    restaurant3_location = Restaurant_address(restaurant=restaurant3,
-                                              country="Poland",
-                                              state = "mazowieckie",
-                                              city = "Warsaw",
-                                              district="Śródmieście",
-                                              street_address = "plac Marszałka Józefa Piłsudskiego 9",
-                                              lat=52.243188,
-                                              lon = 21.011573
-                                              )
-
-    db.session.add(restaurant3_location)
-    db.session.commit()
-
-    menuItem1 = MenuItem(name="Hummus",
-                         description="a Lebanese hummus dish. It consists of Lebanese-style wheat noodles served in a meat- or (occasionally) fish-based broth, often flavored with soy sauce or miso, and uses toppings such as sliced pork, dried seaweed, kamaboko, and green onions.",
-                         price="$12.99", course="Entree", restaurant=restaurant3)
-
-    db.session.add(menuItem1)
-    db.session.commit()
-
-
-    # Adding posts
-    post1 = Post(content="this is just a demo post",
-                 rating=2,
-                 posted_at=datetime.datetime.utcnow(),
-                 user=user2,
-                 restaurant=restaurant1)
-    db.session.add(post1)
-    db.session.commit()
-
-    post2 = Post(content="this is a second demo post",
-                 rating=5,
-                 posted_at=datetime.datetime.utcnow(),
-                 user=user2,
-                 restaurant=restaurant1)
-    db.session.add(post2)
-    db.session.commit()
-
-    post3 = Post(content="this is a third demo post",
-                 rating=4,
-                 posted_at=datetime.datetime.utcnow(),
-                 user=user2,
-                 restaurant=restaurant2)
-    db.session.add(post3)
-    db.session.commit()
-    '''
