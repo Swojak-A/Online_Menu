@@ -283,7 +283,6 @@ def create_test_db(path="_external_APIs/data/restaurants/"):
                     break
 
         if "reviews" in restaurant_data.keys():
-            # pprint(zomato_reviews_response)
             for e in restaurant_data["reviews"]:
                 user = e["review"]["user"]["name"]
                 if not User.query.filter(User.user_name == user).first():
