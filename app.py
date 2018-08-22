@@ -63,6 +63,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False, server_default='')
 
     # User information
+    user_name = db.Column(db.String(100, collation='NOCASE'), nullable=False, server_default='')
     first_name = db.Column(db.String(100, collation='NOCASE'), nullable=False, server_default='')
     last_name = db.Column(db.String(100, collation='NOCASE'), nullable=False, server_default='')
 
@@ -88,6 +89,8 @@ class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text)
+    eatstreet_id = db.Column(db.String(50))
+    zomato_id = db.Column(db.String(50))
     location = db.relationship('Restaurant_address', backref='restaurant')
     tags = db.relationship('Tag', secondary='restaurant_tags')
 
@@ -97,10 +100,15 @@ class Restaurant_address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     country = db.Column(db.String(50))
+    country_code = db.Column(db.String(10))
     state = db.Column(db.String(50))
+    county = db.Column(db.String(50))
     city = db.Column(db.String(50))
-    district = db.Column(db.String(50))
-    street_address = db.Column(db.String(50))
+    suburb = db.Column(db.String(50))
+    neighbourhood = db.Column(db.String(50))
+    street = db.Column(db.String(50))
+    house_number = db.Column(db.String(20))
+    postcode = db.Column(db.String(20))
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
 
@@ -123,7 +131,7 @@ class MenuItem(db.Model):
     name = db.Column(db.String(80), nullable=False)
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(250))
-    price = db.Column(db.String(8))
+    price = db.Column(db.Float)
     course = db.Column(db.String(250))
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     restaurant = db.relationship(Restaurant)
