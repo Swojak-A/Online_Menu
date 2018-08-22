@@ -187,12 +187,14 @@ class Zomato_API():
             zomato_search_response = response.json()["restaurants"][0]["restaurant"]
             zomato_id = zomato_search_response["id"]
             zomato_name = zomato_search_response["name"]
+            zomato_location = zomato_search_response["location"]
 
             accept_input = input("eatstreet: {}, \nzomato: {}\nis it okay? ".format(restaurant_data["name"], zomato_name))
 
             if accept_input == "y" or accept_input == "z":
                 restaurant_data["zomato_id"] = zomato_id
                 restaurant_data["zomato_name"] = zomato_name
+                restaurant_data["zomato_location"] = zomato_location
 
                 save_json(file_name=restaurant_file, data=restaurant_data)
         except Exception as err:
@@ -234,16 +236,43 @@ class Zomato_API():
 
             self.fetch_review(restaurant_file=restaurant_file)
 
+class Geolocator():
+    def __init__(self):
+        self.geolocator = Nominatim(user_agent="api_downloader")
 
-def geolocate(city):
-    try:
-        geolocator = Nominatim(user_agent="api_downloader")
-        city_location = geolocator.geocode(city)
-    except Exception as err:
-        logging.warning("Could not geolocate due to error:\n {}\nTrying again...".format(err))
-        city_location = geolocate(city)
-    return city_location
+    def geolocate_city(self, city):
+        try:
+            # geolocator = Nominatim(user_agent="api_downloader")
+            city_location = self.geolocator.geocode(city)
+        except Exception as err:
+            logging.warning("Could not geolocate due to error:\n {}\nTrying again...".format(err))
+            city_location = self.geolocate(city)
+        return city_location
 
+    def reverse_geolocate_restaurant(self, restaurant_file):
+        restaurant_data = open_json(restaurant_file)
+
+        try:
+            restaurant_location = self.geolocator.reverse((restaurant_data["latitude"],
+                                                           restaurant_data["longitude"]))
+
+            # pprint(restaurant_location.raw)
+
+            restaurant_data["full_location"] = restaurant_location.raw["address"]
+            save_json(file_name=restaurant_file, data=restaurant_data)
+
+        except Exception as err:
+            logging.warning("Could not geolocate due to error:\n {}\nTrying again...".format(err))
+            restaurant_location = self.reverse_geolocate_restaurant(restaurant_file)
+        return restaurant_location
+
+    def reverse_geolocate_all_restaurants(self, path="data/restaurants/"):
+        for file in os.listdir(path):
+            restaurant_file = path + file
+
+            logging.info("Preparing to fetch data from: {}".format(restaurant_file))
+
+            self.reverse_geolocate_restaurant(restaurant_file=restaurant_file)
 
 
 #  cities file
@@ -257,5 +286,12 @@ cities = [e.lstrip() for e in cities]
 if __name__ == "__main__":
     e = Eatstreet_API()
     z = Zomato_API()
+    g = Geolocator()
 
-    z.fetch_all_reviews()
+    # z.fetch_cities()
+    # e.fetch_all_restaurants()
+    # e.fetch_all_menus()
+    # z.fetch_all_zomato_rest_data()
+    # z.fetch_all_reviews()
+
+    g.reverse_geolocate_all_restaurants()
