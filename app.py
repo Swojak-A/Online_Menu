@@ -208,6 +208,8 @@ def search_results():
 def restaurantMenu(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
     menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
+    for item in menu_items:
+        item.price = format(item.price, '.2f')
     posts = Post.query.filter_by(restaurant_id=restaurant_id).limit(4).all()
 
     rating_average=None
