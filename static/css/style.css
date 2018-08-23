@@ -863,7 +863,7 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   right: 25px;
 }
 
-.rest-search-result .bottom-links ul, li, a, p {
+.rest-search-result .bottom-links ul, .rest-search-result .bottom-links li, .rest-search-result .bottom-links a, .rest-search-result .bottom-links p {
   margin-bottom: 0; 
   padding-bottom: 0;
   color: #fed136;
