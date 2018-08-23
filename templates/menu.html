@@ -96,7 +96,6 @@
     <!-- Menu Items section -->
     <section class="bg-light micro-padding" id="menu-items">
     {% for i in menu_items %}
-    <!-- <section class="bg-light no-padding"> -->
 
       <div class="container item menu-item rounded shadow-sm">
         
@@ -105,14 +104,14 @@
             <h4>{{ i.name }}</h4>
           </div>
           <div class="col-lg-4 text-right">
-            <p>{{ i.price }}</p>
+            <p>${{ i.price }}</p>
           </div>
         </div>
 
         <div class="row">
           <div class="col-lg-12 text-left">
             
-            <p><small>{{ i.course }}</small></p>
+            <p><small class="text-muted">{{ i.course }}</small></p>
             <p class="text-muted">{{ i.description }}</p> 
 
           </div>
@@ -129,7 +128,6 @@
         </div>
 
       </div>
-    <!-- </section> -->
 
     {% endfor %}
     </section>
