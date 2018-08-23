@@ -283,6 +283,7 @@ def create_test_db(path="_external_APIs/data/restaurants/"):
                     break
 
         if "reviews" in restaurant_data.keys():
+            logging.info("gathering reviews from: {}".format(restaurant_data["name"]))
             for e in restaurant_data["reviews"]:
                 user = e["review"]["user"]["name"]
                 if not User.query.filter(User.user_name == user).first():
@@ -296,7 +297,7 @@ def create_test_db(path="_external_APIs/data/restaurants/"):
                 else:
                     user = User.query.filter(User.user_name == user).first()
                 content = e["review"]["review_text"]
-                rating = e["review"]["rating"]
+                rating = e["review"]["rating"] if type(e["review"]["review_text"]) == int and e["review"]["review_text"] > 0 else randint(1,5)
                 posted_at = datetime.datetime.utcfromtimestamp(e["review"]["timestamp"])
 
                 post = Post(content=content,
