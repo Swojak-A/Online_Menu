@@ -1,3 +1,5 @@
+{% from "_macros.html" import address %}
+
           {% for restaurant in restaurants %}
           <div class="col-12 rest-search-result">
             
@@ -13,7 +15,7 @@
                   <div class="text-left">
                     <h3>{{restaurant.name}}</h3>
                     {% if restaurant.location[0] %}
-                      <p class="text-muted">{{ restaurant.location[0].street_address }}, {{ restaurant.location[0].city }}</p>
+                      <p class="text-muted">{{ address(location=restaurant.location[0]) }}</p>
                     {% else %}
                       <p class="text-muted">Location not found in the database.</p>
                     {% endif %}

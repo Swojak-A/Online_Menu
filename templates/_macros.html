@@ -203,3 +203,13 @@
   {% endif%}
 {% endmacro %}
 
+<!-- address formating -->
+{% macro address(location) %}
+
+  {% if location.street %}
+    {{ location.house_number }} {{ location.street }}, {{ location.city }}, {{ location.state_short }}
+  {% else %}
+    {{ location.city }}, {{ location.state_short }}
+  {% endif %}
+
+{% endmacro %}

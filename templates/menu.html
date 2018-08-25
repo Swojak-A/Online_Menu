@@ -1,5 +1,5 @@
 {% extends "_base.html" %}
-{% from "_macros.html" import nav_bar, header, message_flashing, post_view, rating %}
+{% from "_macros.html" import nav_bar, header, message_flashing, post_view, rating, address %}
 {% from "_macros_js.html" import google_maps_script %}
 
 <!-- HEAD -->
@@ -30,7 +30,7 @@
             <h1 class="section-heading">{{ restaurant.name }}</h1>
 
             {% if restaurant.location[0] %}
-              <h2 class="section-subheading text-muted">{{ restaurant.location[0].street_address }}, {{ restaurant.location[0].city }}</h2>
+              <h2 class="section-subheading text-muted">{{ address(location=restaurant.location[0]) }}</h2>
             {% else %}
               <h2 class="section-subheading text-muted">Location not found in the database.</h2>
             {% endif %}
