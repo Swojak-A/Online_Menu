@@ -206,7 +206,7 @@ def get_value(dict, key):
     value = dict[key] if key in dict.keys() else ""
     return value
 
-def create_test_db(path="_external_APIs/data/restaurants/"):
+def create_db(path="_external_APIs/data/restaurants/"):
     temp_incrementation = 0
 
 
