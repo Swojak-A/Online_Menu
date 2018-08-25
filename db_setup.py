@@ -117,6 +117,7 @@ class Restaurant_address(db.Model):
     country = db.Column(db.String(50))
     country_code = db.Column(db.String(10))
     state = db.Column(db.String(50))
+    state_short = db.Column(db.String(10))
     county = db.Column(db.String(50))
     city = db.Column(db.String(50))
     suburb = db.Column(db.String(50))
@@ -236,6 +237,7 @@ def create_test_db(path="_external_APIs/data/restaurants/"):
                                                  country= get_value(dict=location_data, key="country"),
                                                  country_code = get_value(dict=location_data, key="country_code"),
                                                  state = get_value(dict=location_data, key="state"),
+                                                 state_short = restaurant_data["state"],
                                                  county = get_value(dict=location_data, key="county"),
                                                  city = restaurant_data["city"],
                                                  suburb = get_value(dict=location_data, key="suburb"),

@@ -102,6 +102,7 @@ class Restaurant_address(db.Model):
     country = db.Column(db.String(50))
     country_code = db.Column(db.String(10))
     state = db.Column(db.String(50))
+    state_short = db.Column(db.String(10))
     county = db.Column(db.String(50))
     city = db.Column(db.String(50))
     suburb = db.Column(db.String(50))
