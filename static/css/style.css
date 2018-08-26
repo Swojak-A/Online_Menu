@@ -967,3 +967,14 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   height: 120px;
 }
 
+
+.tag-container {
+  padding: 5px 0px;
+}
+
+.tag {
+  background-color: #fed136;
+  padding: 5px;
+  margin-bottom: 3px;
+  display: inline-block;
+}

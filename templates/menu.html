@@ -1,5 +1,5 @@
 {% extends "_base.html" %}
-{% from "_macros.html" import nav_bar, header, message_flashing, post_view, rating, address %}
+{% from "_macros.html" import nav_bar, header, message_flashing, post_view, rating, address, show_tags %}
 {% from "_macros_js.html" import google_maps_script %}
 
 <!-- HEAD -->
@@ -54,7 +54,8 @@
 
         <div class="row">
           <div class="col-lg-12 text-left">
-            <p class="text-muted" id="restaurant-description">{{restaurant.description}}</p>
+            <!-- <p class="text-muted" id="restaurant-description">{{restaurant.description}}</p> -->
+            {{ show_tags(tags=restaurant.tags) }}
           </div>
         </div>
 

@@ -213,3 +213,21 @@
   {% endif %}
 
 {% endmacro %}
+
+{% macro show_tags(tags, hide) %}
+
+  {% if hide == True %}
+    <div class="tag-container l-hide">
+      {% for tag in tags %}
+        <a class="tag rounded">{{ tag.name }}</a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="tag-container">
+      {% for tag in tags %}
+        <a class="tag rounded">{{ tag.name }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{% endmacro %}

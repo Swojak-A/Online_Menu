@@ -1,4 +1,4 @@
-{% from "_macros.html" import address %}
+{% from "_macros.html" import address, show_tags %}
 
           {% for restaurant in restaurants %}
           <div class="col-12 rest-search-result">
@@ -20,6 +20,7 @@
                       <p class="text-muted">Location not found in the database.</p>
                     {% endif %}
                     <hr>
+
                   </div>
                   <div class="text-right bottom-links">
                     <ul class="list-inline">
