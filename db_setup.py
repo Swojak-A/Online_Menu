@@ -253,13 +253,16 @@ def create_db(path="_external_APIs/test_data/restaurants/"):
 
         # Tags input
         for e in restaurant_data["foodTypes"]:
-            if not Tag.query.filter(Tag.name == e).first():
-                tag = Tag(name=e)
+            if e == "":
+                continue
             else:
-                tag = Tag.query.filter(Tag.name == e).first()
-            restaurant.tags.append(tag)
-            db.session.add(restaurant)
-            db.session.commit()
+                if not Tag.query.filter(Tag.name == e).first():
+                    tag = Tag(name=e)
+                else:
+                    tag = Tag.query.filter(Tag.name == e).first()
+                restaurant.tags.append(tag)
+                db.session.add(restaurant)
+                db.session.commit()
 
         # adding menu items
         for e in restaurant_data["menu"]:
