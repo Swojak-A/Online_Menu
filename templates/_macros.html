@@ -76,7 +76,7 @@
     </header>
 	{% else %}
     {% if restaurant %}
-    <header class="masthead" style="background-image: url('/static/img/restaurants/{{restaurant.id}}/background.jpeg')">
+    <header class="masthead" style="background-image: url({{ restaurant.img_main }})">
     {% else %}
     <header class="masthead">
     {% endif %}
