@@ -9,9 +9,10 @@ from passes.mail import MailData
 # creating test db
 import requests
 import os
+
 import json
 from pprint import pprint
-from random import randint
+from random import randint, choice
 import datetime
 from geopy.geocoders import Nominatim
 
@@ -108,6 +109,9 @@ class Restaurant(db.Model):
     zomato_id = db.Column(db.String(50))
     location = db.relationship('Restaurant_address', backref='restaurant')
     tags = db.relationship('Tag', secondary='restaurant_tags')
+    img_main = db.Column(db.String(50))
+    img_thumb = db.Column(db.String(50))
+
 
 class Restaurant_address(db.Model):
     __tablename__ = "restaurant_address"
@@ -210,6 +214,7 @@ def create_db(path="_external_APIs/test_data/restaurants/"):
     temp_incrementation = 0
 
 
+
     for file in os.listdir(path):
         logging.info("Preparing to extract data from: {}".format(file))
 
@@ -263,6 +268,7 @@ def create_db(path="_external_APIs/test_data/restaurants/"):
                 restaurant.tags.append(tag)
                 db.session.add(restaurant)
                 db.session.commit()
+
 
         # adding menu items
         for e in restaurant_data["menu"]:
@@ -323,7 +329,7 @@ if __name__ == "__main__":
     db.create_all()
 
     create_basic_users()
-    create_test_db()
+    create_db()
 
 
 

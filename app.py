@@ -93,6 +93,8 @@ class Restaurant(db.Model):
     zomato_id = db.Column(db.String(50))
     location = db.relationship('Restaurant_address', backref='restaurant')
     tags = db.relationship('Tag', secondary='restaurant_tags')
+    img_main = db.Column(db.String(50))
+    img_thumb = db.Column(db.String(50))
 
 class Restaurant_address(db.Model):
     __tablename__ = "restaurant_address"
