@@ -9,12 +9,14 @@ from passes.mail import MailData
 # creating test db
 import requests
 import os
+import shutil
 
 import json
 from pprint import pprint
 from random import randint, choice
 import datetime
 from geopy.geocoders import Nominatim
+from image import crop_image
 
 import logging
 
@@ -213,6 +215,9 @@ def get_value(dict, key):
 def create_db(path="_external_APIs/test_data/restaurants/"):
     temp_incrementation = 0
 
+    rest_img_path = 'static/img/restaurants'
+    shutil.rmtree(rest_img_path)
+    os.makedirs(rest_img_path)
 
 
     for file in os.listdir(path):
@@ -269,6 +274,33 @@ def create_db(path="_external_APIs/test_data/restaurants/"):
                 db.session.add(restaurant)
                 db.session.commit()
 
+        # adding photos
+        img_pool = []
+        img_path = "static/img/img_by_tags"
+        for tag in restaurant.tags:
+            tag = tag.name.split()[0].lower()
+            for img in os.listdir(img_path):
+                img_name = img.split("_")[0].lower()
+                if tag == img_name:
+                    img_pool.append((img_path + "/" + img))
+
+        if len(img_pool) > 0:
+            main_img = choice(img_pool)
+        else:
+            main_img = "static/img/no_photo.jpeg"
+
+        rest_img_dir = rest_img_path + "/" + str(restaurant.id)
+        os.makedirs(rest_img_dir)
+        main_file = rest_img_dir + "/" + "main.jpg"
+        thumb_file = rest_img_dir + "/" + "thumb.jpg"
+
+        crop_image(in_image_filename=main_img, out_image_filename=main_file, width=1920, height=1280)
+        crop_image(in_image_filename=main_img, out_image_filename=thumb_file, width=400, height=300)
+
+        restaurant.img_main = main_file
+        restaurant.img_thumb = thumb_file
+        db.session.add(restaurant)
+        db.session.commit()
 
         # adding menu items
         for e in restaurant_data["menu"]:
