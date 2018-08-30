@@ -211,8 +211,11 @@ def search_results():
 def restaurantMenu(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).one()
     menu_items = MenuItem.query.filter_by(restaurant_id=restaurant_id).all()
+    courses = []
     for item in menu_items:
         item.price = format(item.price, '.2f')
+        if item.course not in courses:
+            courses.append(item.course)
     posts = Post.query.filter_by(restaurant_id=restaurant_id).limit(4).all()
 
     rating_average=None
@@ -236,7 +239,7 @@ def restaurantMenu(restaurant_id):
         app.logger.info("New post added to database")
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
 
-    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, posts=posts, avg=rating_average)
+    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, courses=courses, posts=posts, avg=rating_average)
 
 @app.route('/_more-posts', methods=['GET', 'POST'])
 def morePosts():
