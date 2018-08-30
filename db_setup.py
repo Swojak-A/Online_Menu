@@ -297,8 +297,8 @@ def create_db(path="_external_APIs/test_data/restaurants/"):
         crop_image(in_image_filename=main_img, out_image_filename=main_file, width=1920, height=1280)
         crop_image(in_image_filename=main_img, out_image_filename=thumb_file, width=400, height=300)
 
-        restaurant.img_main = main_file
-        restaurant.img_thumb = thumb_file
+        restaurant.img_main = "/" + main_file
+        restaurant.img_thumb = "/" + thumb_file
         db.session.add(restaurant)
         db.session.commit()
 
