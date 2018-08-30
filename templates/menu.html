@@ -96,41 +96,49 @@
 
     <!-- Menu Items section -->
     <section class="bg-light micro-padding" id="menu-items">
-    {% for i in menu_items %}
-
-      <div class="container item menu-item rounded shadow-sm">
-        
-        <div class="row">
-          <div class="col-lg-8 text-left">
-            <h4>{{ i.name }}</h4>
-          </div>
-          <div class="col-lg-4 text-right">
-            <p>${{ i.price }}</p>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-12 text-left">
-            
-            <p><small class="text-muted">{{ i.course }}</small></p>
-            <p class="text-muted">{{ i.description }}</p> 
-
-          </div>
-        </div>
-
-        <div class="row" id="menu-item-buttons">
-          <div class="col-lg-8 text-left">
-            <a class="pseudo-btn" href='{{ url_for('editMenuItem', restaurant_id = restaurant.id, item_id = i.id ) }}'>Edit</a>
-            <a class="pseudo-btn" href='{{ url_for('deleteMenuItem', restaurant_id = restaurant.id, item_id = i.id ) }}'>Delete</a>
-          </div>
-          <div class="col-lg-4 text-right align-middle">
-            <a class="btn btn-primary">Add to cart</a>
-          </div>
-        </div>
-
+    {% for course in courses %}
+      <div class="container course-label">
+        <h5 class="text-muted">{{ course }}:</h5>
       </div>
+        {% for i in menu_items %}
+          {% if course == i.course %}
 
-    {% endfor %}
+            <div class="container item menu-item rounded shadow-sm">
+              
+              <div class="row">
+                <div class="col-lg-8 text-left">
+                  <h4>{{ i.name }}</h4>
+                </div>
+                <div class="col-lg-4 text-right">
+                  <p>${{ i.price }}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12 text-left">
+                  
+                  <!-- <p><small class="text-muted">{{ i.course }}</small></p> -->
+                  <p class="text-muted">{{ i.description }}</p> 
+
+                </div>
+              </div>
+
+              <div class="row" id="menu-item-buttons">
+                <div class="col-lg-8 text-left">
+                  <a class="pseudo-btn" href='{{ url_for('editMenuItem', restaurant_id = restaurant.id, item_id = i.id ) }}'>Edit</a>
+                  <a class="pseudo-btn" href='{{ url_for('deleteMenuItem', restaurant_id = restaurant.id, item_id = i.id ) }}'>Delete</a>
+                </div>
+                <div class="col-lg-4 text-right align-middle">
+                  <a class="btn btn-primary">Add to cart</a>
+                </div>
+              </div>
+
+            </div>
+
+          {% endif %}
+
+        {% endfor %}
+      {% endfor %}
     </section>
 
     <!-- Comments section -->

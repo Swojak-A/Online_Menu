@@ -978,3 +978,8 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   margin-bottom: 3px;
   display: inline-block;
 }
+
+
+.course-label {
+  padding-top: 15px;
+}
