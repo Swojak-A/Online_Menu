@@ -167,7 +167,10 @@ def mainPage():
     restaurants = [i for i in restaurants]
     shuffle(restaurants)
 
-    return render_template("index.html", restaurants=restaurants[:9])
+    query = db.session.query(Restaurant_address.city.distinct().label("city"))
+    prompt_cities = [row.city for row in query.limit(3)]
+
+    return render_template("index.html", restaurants=restaurants[:9], prompt_cities=prompt_cities)
 
 
 
@@ -179,9 +182,13 @@ def restaurants():
     location = "" if location == None else location
     user_input = "" if user_input == None else user_input
 
-    app.logger.info("User search using parameters: location = {}, input = {}".format(location, user_input))
+    app.logger.info("User search in restaurants using parameters: location = {}, input = {}".format(location, user_input))
 
-    return render_template("restaurants.html", location=location, user_input=user_input)
+    query = db.session.query(Restaurant_address.city.distinct().label("city"))
+    prompt_cities = [row.city for row in query.limit(3)]
+
+    return render_template("restaurants.html", location=location, user_input=user_input, prompt_cities=prompt_cities
+                           )
 
 
 
@@ -190,7 +197,7 @@ def search_results():
 
     location = request.form['location'].lower()
     user_input = request.form['input'].lower()
-    app.logger.info("User search using parameters: location = {}, input = {}".format(location, user_input))
+    app.logger.info("User search in _search_results using parameters: location = {}, input = {}".format(location, user_input))
 
     if user_input:
         if "tag" in user_input:
@@ -248,7 +255,6 @@ def search_results():
                                                   | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
                                                   | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
                                                   ).all()
-
 
     return render_template("restaurants-search.html", restaurants=restaurants)
 
