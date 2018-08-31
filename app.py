@@ -187,8 +187,7 @@ def restaurants():
     query = db.session.query(Restaurant_address.city.distinct().label("city"))
     prompt_cities = [row.city for row in query.limit(3)]
 
-    return render_template("restaurants.html", location=location, user_input=user_input, prompt_cities=prompt_cities
-                           )
+    return render_template("restaurants.html", location=location, user_input=user_input, prompt_cities=prompt_cities)
 
 
 
