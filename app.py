@@ -193,12 +193,25 @@ def search_results():
     app.logger.info("User search using parameters: location = {}, input = {}".format(location, user_input))
 
     if user_input:
-        # if user_input in ["edible"]:
-        #     fungi = Fungus.query.filter_by(edible=True).all()
-        # elif user_input in ["poisonous", "poisonus", "poison"]:
-        #     fungi = Fungus.query.filter_by(edible=False).all()
-        # else:
-        restaurants = Restaurant.query.filter(Restaurant.name.like('%{}%'.format(user_input))).all()
+        if "tag" in user_input:
+            if ":" in user_input:
+                separator = ":"
+            else:
+                separator = " "
+            user_input = " ".join(user_input.split(separator)[1:]).lstrip()
+            print(user_input)
+            restaurants = Restaurant.query.filter(Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))).all()
+        elif "name" in user_input:
+            if ":" in user_input:
+                separator = ":"
+            else:
+                separator = " "
+            user_input = " ".join(user_input.split(separator)[1:]).lstrip()
+            print(user_input)
+            restaurants = Restaurant.query.filter(Restaurant.name.like("%{}%".format(user_input))).all()
+        else:
+            restaurants = Restaurant.query.filter(Restaurant.name.like("%{}%".format(user_input)) \
+                                                    | Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))).all()
     else:
         restaurants = Restaurant.query.all()
 
