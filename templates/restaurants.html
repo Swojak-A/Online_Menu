@@ -17,7 +17,7 @@
 
   {{ nav_bar({"Info":"#restaurant-info", "Menu":"#menu", "Comments":"#comments"}) }}
 
-  {{ header(main_page=False) }}
+  {{ header(main_page=False, prompt_cities=prompt_cities) }}
 
   {{ message_flashing() }}
 
@@ -27,10 +27,10 @@
         <div class="row">
           <div class="col-lg-12 text-left">
 
-            <h1 class="section-heading">Find a place for you {{ location }}</h1>
+            <h1 class="section-heading">Find a place for you in... {{ location }}</h1>
             <br>
 
-              {{ search_form(location, user_input) }}
+              {{ search_form(location, user_input, prompt_cities) }}
 
           </div>
         </div>

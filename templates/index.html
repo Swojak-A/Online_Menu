@@ -15,7 +15,7 @@
 
   {{ nav_bar({"Services":"#services", "Restaurants":"#restaurants", "How To":"#how-to"}) }}
 
-  {{ header(main_page=True) }}
+  {{ header(main_page=True, prompt_cities=prompt_cities) }}
 
   {{ message_flashing() }}
 
@@ -214,10 +214,18 @@
 <script type="text/javascript">
 
   $.get("https://ipinfo.io/json", function (response) {
-    $('input[name="location"]').val(response.city);
+    $('#ip-location-prompt').text(response.city);
 }, "jsonp");
 
 </script>
 
+<script type="text/javascript">
+  
+  $('.location-prompt').on('click', function() {
+    var prompt_location = $(this).text();
+    $('input[name="location"]').val(prompt_location);
+  });
+
+</script>
 
 {% endblock %}
