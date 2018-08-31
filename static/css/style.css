@@ -977,8 +977,12 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   padding: 5px;
   margin-bottom: 3px;
   display: inline-block;
+  color: #212529;
 }
 
+.tag:hover {
+  color: white;
+}
 
 .course-label {
   padding-top: 15px;
