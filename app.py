@@ -200,7 +200,16 @@ def search_results():
                 separator = " "
             user_input = " ".join(user_input.split(separator)[1:]).lstrip()
             print(user_input)
-            restaurants = Restaurant.query.filter(Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))).all()
+            restaurants = Restaurant.query.filter(Restaurant.location.any(Restaurant_address.country.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.state.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.county.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.city.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.suburb.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.neighbourhood.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
+                                                  , Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))
+                                                  ).all()
         elif "name" in user_input:
             if ":" in user_input:
                 separator = ":"
@@ -208,12 +217,37 @@ def search_results():
                 separator = " "
             user_input = " ".join(user_input.split(separator)[1:]).lstrip()
             print(user_input)
-            restaurants = Restaurant.query.filter(Restaurant.name.like("%{}%".format(user_input))).all()
+            restaurants = Restaurant.query.filter(Restaurant.location.any(Restaurant_address.country.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.state.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.county.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.city.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.suburb.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.neighbourhood.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
+                                                  , Restaurant.name.like("%{}%".format(user_input))
+                                                  ).all()
         else:
-            restaurants = Restaurant.query.filter(Restaurant.name.like("%{}%".format(user_input)) \
-                                                    | Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))).all()
+            restaurants = Restaurant.query.filter(Restaurant.location.any(Restaurant_address.country.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.state.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.county.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.city.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.suburb.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.neighbourhood.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
+                                                  , Restaurant.name.like("%{}%".format(user_input)) \
+                                                  | Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))).all()
     else:
-        restaurants = Restaurant.query.all()
+        restaurants = Restaurant.query.filter(Restaurant.location.any(Restaurant_address.country.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.state.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.county.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.city.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.suburb.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.neighbourhood.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
+                                                  | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
+                                                  ).all()
 
 
     return render_template("restaurants-search.html", restaurants=restaurants)
