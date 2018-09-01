@@ -86,7 +86,7 @@
 
             {% for place in places %}
               <div class="col-lg-4 col-md-6">
-                <a class="text-muted" href="#" style="display: block;">{{ place }}</a>
+                <a class="text-muted" href="{{ url_for('restaurants', location=place) }}" style="display: block;">{{ place }}</a>
               </div>
             {% endfor %}
 
