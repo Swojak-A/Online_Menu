@@ -15,14 +15,14 @@
 <!-- BODY -->
 {% block content %}
 
-  {{ nav_bar({"Info":"#restaurant-info", "Menu":"#menu", "Comments":"#comments"}) }}
+  {{ nav_bar({"Search":"#search", "Tags":"#tags", "Locations":"#locations"}) }}
 
   {{ header(main_page=False, prompt_cities=prompt_cities) }}
 
   {{ message_flashing() }}
 
     <!-- Restaurant info section -->
-    <section class="bg-white">
+    <section class="bg-white" id="search">
       <div class="container item">
         <div class="row">
           <div class="col-lg-12 text-left">
@@ -78,7 +78,7 @@
         </div>
       </div>
 
-      <div class="container item">
+      <div class="container item" id="locations">
         <div class="row">
           <div class="col-lg-12 text-left">
             <h5 class="section-heading">Most popular locations:</h5>
