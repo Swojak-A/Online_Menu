@@ -187,7 +187,37 @@ def restaurants():
     query = db.session.query(Restaurant_address.city.distinct().label("city"))
     prompt_cities = [row.city for row in query.limit(3)]
 
-    return render_template("restaurants.html", location=location, user_input=user_input, prompt_cities=prompt_cities)
+    tags = Tag.query.limit(60)
+    tags = [i for i in tags]
+    shuffle(tags)
+
+    places = []
+    query = db.session.query(Restaurant_address.city.distinct().label("place"))
+    for row in query.limit(30):
+        if row.place != "":
+            places.append(row.place)
+    if len(places) < 30:
+        query = db.session.query(Restaurant_address.suburb.distinct().label("place"))
+        for row in query.limit(30 - len(places)):
+            if row.place != "":
+                places.append(row.place)
+        if len(places) < 30:
+            query = db.session.query(Restaurant_address.neighbourhood.distinct().label("place"))
+            for row in query.limit(30 - len(places)):
+                if row.place != "":
+                    places.append(row.place)
+            if len(places) < 30:
+                query = db.session.query(Restaurant_address.street.distinct().label("place"))
+                for row in query.limit(30 - len(places)):
+                    if row.place != "":
+                        places.append(row.place)
+                if len(places) < 30:
+                    query = db.session.query(Restaurant_address.state.distinct().label("place"))
+                    for row in query.limit(30 - len(places)):
+                        if row.place != "":
+                            places.append(row.place)
+
+    return render_template("restaurants.html", location=location, user_input=user_input, prompt_cities=prompt_cities, tags=tags[:30], places=places)
 
 
 
