@@ -143,10 +143,18 @@ function goToByScroll(id) {
     $('html,body').animate({
         scrollTop: $(id).offset().top
     }, 'fast');
-  }
+  };
 
 
 </script>
 
+<script type="text/javascript">
+  
+  $('.location-prompt').on('click', function() {
+    var prompt_location = $(this).text();
+    $('input[name="location"]').val(prompt_location);
+  });
+
+</script>
 
 {% endblock%}
