@@ -129,6 +129,19 @@
   });
 });
 
+  $(document).ready(function() {
+
+    $(document).on('click', '.page-link', function(event) {
+      
+      var link = $(this).attr('href');
+      // alert(link);
+      search_restaurants2(link);
+      event.preventDefault();
+
+      
+
+  });
+});
 
   var search_restaurants = function() {
       req=$.ajax({
@@ -143,7 +156,22 @@
       req.done(function(data) {
         $('#restaurant-results').html(data);
       })
-  }
+  };
+
+  var search_restaurants2 = function(link) {
+      req=$.ajax({
+        data : {
+          location: $('input[name="location"]').val(),
+          input: $('input[name="input"]').val()
+        },
+        type: 'POST',
+        url: link
+
+      });
+      req.done(function(data) {
+        $('#restaurant-results').html(data);
+      })
+  };
 
 
 </script>

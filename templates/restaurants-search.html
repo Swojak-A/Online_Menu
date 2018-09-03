@@ -1,6 +1,6 @@
 {% from "_macros.html" import address, show_tags %}
 
-          {% for restaurant in restaurants %}
+          {% for restaurant in restaurants.items %}
           <div class="col-12 rest-search-result">
             
             <div class="row">
@@ -43,3 +43,16 @@
 
           </div>
           {% endfor %}
+
+          <div class="col-12 text-right">
+            {% for page in restaurants.iter_pages() %}
+
+              {% if page %}
+                <a class="page-link" href="{{url_for('search_results', page=page)}}" style="display: inline-block;">{{ page }}</a>
+              {% else %}
+                ...
+              {% endif %}
+
+            {% endfor %}
+          </div>
+
