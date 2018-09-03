@@ -102,63 +102,29 @@
 <script type="text/javascript">
 
   $(document).ready(function() {
-    $('#drop-name').on('click', function() {
-      $('#user-column').val('Name');
-    });
-    $('#drop-lat-name').on('click', function() {
-      $('#user-column').val('Latin Name');
-    });
-  });
-
-
-
-  $(document).ready(function() {
-    search_restaurants();
-  });
-
-
-
-  $(document).ready(function() {
+    var link = '/_search_results';
+    search_restaurants(link);
 
     $(document).on('click', '#search-btn', function(event) {
-
-      search_restaurants();
+      var link = '/_search_results';
+      search_restaurants(link);
 
       event.preventDefault();
-
-  });
-});
-
-  $(document).ready(function() {
+    });
 
     $(document).on('click', '.page-link', function(event) {
       
       var link = $(this).attr('href');
       // alert(link);
-      search_restaurants2(link);
+      search_restaurants(link);
       event.preventDefault();
-
-      
+      goToByScroll('#search');
+    });
 
   });
-});
 
-  var search_restaurants = function() {
-      req=$.ajax({
-        data : {
-          location: $('input[name="location"]').val(),
-          input: $('input[name="input"]').val()
-        },
-        type: 'POST',
-        url: '/_search_results'
 
-      });
-      req.done(function(data) {
-        $('#restaurant-results').html(data);
-      })
-  };
-
-  var search_restaurants2 = function(link) {
+  var search_restaurants = function(link) {
       req=$.ajax({
         data : {
           location: $('input[name="location"]').val(),
@@ -172,6 +138,12 @@
         $('#restaurant-results').html(data);
       })
   };
+
+function goToByScroll(id) {
+    $('html,body').animate({
+        scrollTop: $(id).offset().top
+    }, 'fast');
+  }
 
 
 </script>
