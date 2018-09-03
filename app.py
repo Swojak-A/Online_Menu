@@ -289,7 +289,7 @@ def search_results():
                                                   | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
                                                   ).paginate(page=page, per_page=5)
 
-    return render_template("restaurants-search2.html", restaurants=restaurants)
+    return render_template("restaurants-search.html", restaurants=restaurants)
 
 
 
