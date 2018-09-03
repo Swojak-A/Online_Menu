@@ -221,8 +221,11 @@ def restaurants():
 
 
 
-@app.route("/_search_results", methods=['POST'])
+@app.route("/_search_results", methods=['GET', 'POST'])
 def search_results():
+
+    page = request.args.get('page')
+    page = 1 if page == None else int(page)
 
     location = request.form['location'].lower()
     user_input = request.form['input'].lower()
@@ -245,7 +248,7 @@ def search_results():
                                                   | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
                                                   | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
                                                   , Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))
-                                                  ).all()
+                                                  ).paginate(page=page, per_page=5)
         elif "name" in user_input:
             if ":" in user_input:
                 separator = ":"
@@ -262,7 +265,7 @@ def search_results():
                                                   | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
                                                   | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
                                                   , Restaurant.name.like("%{}%".format(user_input))
-                                                  ).all()
+                                                  ).paginate(page=page, per_page=5)
         else:
             restaurants = Restaurant.query.filter(Restaurant.location.any(Restaurant_address.country.like("%{}%".format(location))) \
                                                   | Restaurant.location.any(Restaurant_address.state.like("%{}%".format(location))) \
@@ -273,7 +276,8 @@ def search_results():
                                                   | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
                                                   | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
                                                   , Restaurant.name.like("%{}%".format(user_input)) \
-                                                  | Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))).all()
+                                                  | Restaurant.tags.any(Tag.name.like("%{}%".format(user_input)))
+                                                  ).paginate(page=page, per_page=5)
     else:
         restaurants = Restaurant.query.filter(Restaurant.location.any(Restaurant_address.country.like("%{}%".format(location))) \
                                                   | Restaurant.location.any(Restaurant_address.state.like("%{}%".format(location))) \
@@ -283,9 +287,9 @@ def search_results():
                                                   | Restaurant.location.any(Restaurant_address.neighbourhood.like("%{}%".format(location))) \
                                                   | Restaurant.location.any(Restaurant_address.street.like("%{}%".format(location))) \
                                                   | Restaurant.location.any(Restaurant_address.postcode.like("%{}%".format(location))) \
-                                                  ).all()
+                                                  ).paginate(page=page, per_page=5)
 
-    return render_template("restaurants-search.html", restaurants=restaurants)
+    return render_template("restaurants-search2.html", restaurants=restaurants)
 
 
 
