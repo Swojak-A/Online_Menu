@@ -311,19 +311,22 @@ def restaurantMenu(restaurant_id):
             rating_sum += post.rating
         rating_average = rating_sum / len(posts)
 
-    if request.method == "POST":
-        newPost = Post(content=request.form['post-content'],
-                       rating=request.form['rating-value'],
-                       posted_at=datetime.datetime.utcnow(),
-                       user=current_user,
-                       restaurant=restaurant)
+    if request.method == 'POST':
+        if current_user.is_authenticated:
+            newPost = Post(content=request.form['post-content'],
+                           rating=request.form['rating-value'],
+                           posted_at=datetime.datetime.utcnow(),
+                           user=current_user,
+                           restaurant=restaurant)
 
-        db.session.add(newPost)
-        db.session.commit()
+            db.session.add(newPost)
+            db.session.commit()
 
-        flash("Your comment was successfully submitted!")
-        app.logger.info("New post added to database")
-        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
+            flash("Your comment was successfully submitted!")
+            app.logger.info("New post added to database")
+            return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
+        else:
+            return app.login_manager.unauthorized()
 
     return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, courses=courses, posts=posts, avg=rating_average)
 
