@@ -85,8 +85,11 @@
     <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Contact form JavaScript -->
-    <script src="/static/vendor/agency-template/jqBootstrapValidation.js"></script>
+    <script async src="/static/vendor/agency-template/jqBootstrapValidation.js"></script>
     <script src="/static/vendor/agency-template/contact_me.js"></script>
+    <script type="text/javascript">
+      $(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );
+    </script>
 
     <!-- Custom scripts for agency template -->
     <script src="/static/vendor/agency-template/agency.min.js"></script>
