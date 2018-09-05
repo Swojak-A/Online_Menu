@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, request, render_template, flash, redirect, url_for, jsonify
+from flask import Flask, request, render_template, flash, redirect, url_for, jsonify, make_response
 # from flask_babelex import Babel
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
@@ -304,6 +304,13 @@ def restaurantMenu(restaurant_id):
             courses.append(item.course)
     posts = Post.query.filter_by(restaurant_id=restaurant_id).limit(4).all()
 
+    if request.cookies.get('unfinished_rating_{}'.format(restaurant_id)):
+        unfinished_rating = int(request.cookies.get('unfinished_rating_{}'.format(restaurant_id)))
+        unfinished_comment = request.cookies.get('unfinished_comment_{}'.format(restaurant_id))
+        unfinished_post = {"unfinished_rating": unfinished_rating, "unfinished_comment": unfinished_comment}
+    else:
+        unfinished_post = {}
+
     rating_average=None
     if len(posts) > 0:
         rating_sum = 0
@@ -324,11 +331,24 @@ def restaurantMenu(restaurant_id):
 
             flash("Your comment was successfully submitted!")
             app.logger.info("New post added to database")
-            return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
-        else:
-            return app.login_manager.unauthorized()
 
-    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, courses=courses, posts=posts, avg=rating_average)
+            response = make_response(redirect(url_for('restaurantMenu', restaurant_id=restaurant_id)))
+            response.set_cookie('unfinished_rating_{}'.format(restaurant_id), "", max_age=15, expires=0)
+            response.set_cookie('unfinished_comment_{}'.format(restaurant_id), "", max_age=15, expires=0)
+
+            return response
+
+        else:
+            unfinished_rating = request.form['rating-value']
+            unfinished_comment = request.form['post-content']
+
+            response = make_response(app.login_manager.unauthorized())
+            response.set_cookie('unfinished_rating_{}'.format(restaurant_id), unfinished_rating)
+            response.set_cookie('unfinished_comment_{}'.format(restaurant_id), unfinished_comment)
+
+            return response
+
+    return render_template("menu.html", restaurant=restaurant, menu_items=menu_items, courses=courses, posts=posts, avg=rating_average, **unfinished_post)
 
 @app.route('/_more-posts', methods=['GET', 'POST'])
 def morePosts():
