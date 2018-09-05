@@ -207,15 +207,30 @@
               <br>
               <div class="control-group form-group">
                 <div class="star-rating-input__wrap">
-                  <input class="form-control star-rating-input__input" id="star-rating-5" type="radio" name="rating-value" value="5" required data-validation-required-message="Rating is required when posting a comment."> 
+                  <input class="form-control star-rating-input__input" id="star-rating-5" type="radio" name="rating-value" value="5" required data-validation-required-message="Rating is required when posting a comment." 
+                    {% if unfinished_rating == 5 %}
+                      checked 
+                    {% endif %}> 
                   <label class="star-rating-input__ico fa fa-star-o fa-lg" for="star-rating-5" title="5 out of 5 stars"></label>
-                  <input class="star-rating-input__input" id="star-rating-4" type="radio" name="rating-value" value="4">
+                  <input class="star-rating-input__input" id="star-rating-4" type="radio" name="rating-value" value="4"
+                    {% if unfinished_rating == 4 %}
+                      checked 
+                    {% endif %}>
                   <label class="star-rating-input__ico fa fa-star-o fa-lg" for="star-rating-4" title="4 out of 5 stars"></label>
-                  <input class="star-rating-input__input" id="star-rating-3" type="radio" name="rating-value" value="3">
+                  <input class="star-rating-input__input" id="star-rating-3" type="radio" name="rating-value" value="3"
+                    {% if unfinished_rating == 3 %}
+                      checked 
+                    {% endif %}>
                   <label class="star-rating-input__ico fa fa-star-o fa-lg" for="star-rating-3" title="3 out of 5 stars"></label>
-                  <input class="star-rating-input__input" id="star-rating-2" type="radio" name="rating-value" value="2">
+                  <input class="star-rating-input__input" id="star-rating-2" type="radio" name="rating-value" value="2"
+                    {% if unfinished_rating == 2 %}
+                      checked 
+                    {% endif %}>
                   <label class="star-rating-input__ico fa fa-star-o fa-lg" for="star-rating-2" title="2 out of 5 stars"></label>
-                  <input class="star-rating-input__input" id="star-rating-1" type="radio" name="rating-value" value="1">
+                  <input class="star-rating-input__input" id="star-rating-1" type="radio" name="rating-value" value="1"
+                    {% if unfinished_rating == 1 %}
+                      checked 
+                    {% endif %}>
                   <label class="star-rating-input__ico fa fa-star-o fa-lg" for="star-rating-1" title="1 out of 5 stars"></label>
                 </div>
                 <p id="rating-validation" class="help-block text-danger"></p>
@@ -224,7 +239,7 @@
               <!-- <br> -->
               
               <div class="form-group">
-                <textarea name="post-content" class="form-control post-input" id="message" placeholder="Your Message *" required data-validation-required-message="Typing a message is required when posting a comment."></textarea>
+                <textarea name="post-content" class="form-control post-input" id="message" placeholder="Your Message *" required data-validation-required-message="Typing a message is required when posting a comment.">{{ unfinished_comment }}</textarea>
                 <p class="help-block text-danger"></p>
               </div>
               <div class="form-group text-center">
