@@ -9,11 +9,36 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav text-uppercase ml-auto">
+
             {% for section in sections %}
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href={{sections[section]}}>{{section}}</a>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger mt-2" href={{sections[section]}}>{{section}}</a>
+              </li>
             {% endfor %}
+
+            {% if current_user.is_anonymous %}
+
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger border rounded ml-5 mt-2 mb-2" href="{{url_for('user.login', next=request.url)}}">Log In</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link disabled mt-2" href="#">or</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger border rounded mt-2 mb-2" href="{{url_for('user.register', next=request.url)}}">Register</a>
+              </li>
+
+            {% else %}
+
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger border rounded ml-5 mt-2 mb-2" href="{{url_for('user.logout')}}">Log Out</a>
+              </li>
+
+            {% endif%}
+
+
         </div>
       </div>
     </nav>

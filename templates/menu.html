@@ -1,5 +1,5 @@
 {% extends "_base.html" %}
-{% from "_macros.html" import nav_bar, header, message_flashing, post_view, rating, address, show_tags %}
+{% from "_macros.html" import nav_bar, header, message_flashing, post_view, rating, address, show_tags with context %}
 {% from "_macros_js.html" import google_maps_script %}
 
 <!-- HEAD -->
@@ -88,7 +88,7 @@
             <h3 class="section-heading">Menu:</h3>
           </div>
           <div class="col-lg-4 text-right">
-            <a class="pseudo-btn" href = '{{url_for('newMenuItem', restaurant_id = restaurant.id) }}'>Create New Item</a>
+            <a class="pseudo-btn" href = "{{url_for('newMenuItem', restaurant_id = restaurant.id) }}">Create New Item</a>
           </div>
         </div>
       </div>
