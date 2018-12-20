@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
 from passes.mail import MailData
 from random import shuffle
+from geolocator import Geolocator
+
 
 # Class-based application configuration
 class ConfigClass(object):
