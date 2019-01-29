@@ -105,7 +105,8 @@ ENV/
 
 # local settings file
 .idea/
-_external_APIs/
+_external_APIs/downloader.py
+_external_APIs/_API_keys.py
 geolocator.py
 passes/
 test.py
