@@ -6,6 +6,7 @@ from flask_user import current_user, login_required, roles_required, UserManager
 from passes.mail import MailData
 from random import shuffle
 from geolocator import Geolocator
+import os
 
 
 # Class-based application configuration
@@ -13,7 +14,7 @@ class ConfigClass(object):
     """ Flask application config """
 
     # Flask settings
-    SECRET_KEY = 'This is an INSECURE secret!! DO NOT use this in production!!'
+    SECRET_KEY = os.getenv('ONLINE_MENU_SECRET_KEY', 'default_value_for_development_server')
 
     # Flask-SQLAlchemy settings
     SQLALCHEMY_DATABASE_URI = 'sqlite:///db/online_menu.db'  # File-based SQL database
